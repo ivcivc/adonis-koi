@@ -45,7 +45,7 @@ class PessoaSchema extends Schema {
 
       table.string('facebook')
 
-      table.string('instagram')
+      table.string('instagram2')
 
       table.timestamps()
     })
