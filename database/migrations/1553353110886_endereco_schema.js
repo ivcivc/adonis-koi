@@ -7,10 +7,7 @@ class EnderecoSchema extends Schema {
   up () {
     this.create('enderecos', table => {
       table.increments()
-      table
-        .string('logradouro', 50)
-        .notNullable()
-        .unique()
+      table.string('logradouro', 50).notNullable()
 
       table.string('nr', 10).notNullable()
 

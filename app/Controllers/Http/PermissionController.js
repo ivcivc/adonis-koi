@@ -1,6 +1,6 @@
 'use strict'
 
-const Database = use('Database')
+// const Database = use('Database')
 
 const User = use('App/Models/User')
 const Permission = use('Adonis/Acl/Permission')
@@ -83,7 +83,7 @@ class PermissionController {
     }
   }
 
-  /*async user ({ request, response }) {
+  /* async user ({ request, response }) {
     let trx = null
 
     try {
@@ -111,7 +111,7 @@ class PermissionController {
       trx.rollback()
       return response.status(401).send('Falha de validação do token')
     }
-  }*/
+  } */
 }
 
 module.exports = PermissionController

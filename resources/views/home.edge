@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--{{ style('style') }}-->
+    <!--<link href="style.css" rel="stylesheet">-->
+    <style type="text/css">
+        html,
+        body {
+          height: 100%;
+          width: 100%;
+          padding: 0px;
+        }
+
+        body {
+          font-family: "Montserrat", sans-serif;
+          font-weight: 300;
+          background-color: #efefef;
+        }
+
+        .freebirdHeaderMast {
+            background-image: url(https://lh6.googleusercontent.com/pL7Y5YwkYdMb0RHBlzjQpyy6Yh4Ym2jHZln0aCLUYnDR5a8lIl5j3Ai_IbUVkpVYI2KP_FwsMA=w1134);
+            background-size: cover;
+            background-position: center;
+            color: rgba(0, 0, 0, 1);
+        }
+        .freebirdFormviewerViewFormBanner {
+            height: 278px;
+        }
+
+        .formWrapper {
+          display: flex;
+          -webkit-box-orient: vertical;
+
+        }
+
+        @media (max-width: 660px)
+        .formContent {
+            width: 90%;
+        }
+
+        .formContent {
+          /*background-image: url(https://lh6.googleusercontent.com/pL7Y5YwkYdMb0RHBlzjQpyy6Yh4Ym2jHZln0aCLUYnDR5a8lIl5j3Ai_IbUVkpVYI2KP_FwsMA=w1134);*/
+          background-color: aliceblue;
+          background-size: cover;
+          background-position: center;
+          color: rgba(0, 0, 0, 1);
+          margin: auto;
+          margin-top: -170px;
+          width: 828px;
+          padding: 20px;
+        }
+
+    </style>
+
+
+
+    <title>Koi</title>
+
+  </head>
+  <body>
+
+
+    <!-- INICIO FORMULARIO BOTAO PAGSEGURO: NAO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+    <form action="https://pagseguro.uol.com.br/pre-approvals/request.html" method="post">
+      <input type="hidden" name="code" value="36849B3CBEBECE4EE4A71F9C8D0DE443" />
+      <input type="hidden" name="iot" value="button" />
+      <input type="image" src="https://stc.pagseguro.uol.com.br/public/img/botoes/assinaturas/209x48-assinar-assina.gif" name="submit" alt="Pague com PagSeguro - É rápido, grátis e seguro!" width="209" height="48" />
+    </form>
+    <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+
+
+
+    sessao: {{sessao}}
+
+
+    <button type="button" class="btn btn-primary" id="btnSessao" onclick="btnSessao">Sessao no servidor</button>
+
+    <div class="freebirdFormviewerViewFormBanner freebirdHeaderMast"></div>
+
+    <div class="card formContent" style="width: 58rem;">
+      <div class="card-body">
+        <div id="titulo"><h4 style="margin-bottom: 20px;" class="card-title" >Instituto Koi - Ficha de Inscrição</h4><hr></div>
+
+        <form>
+
+            <input type="hidden" id="__session" name="__session" value="" />
+
+            <div id="parte1" style="display:block">
+
+                <div class="form-row" >
+
+                  <h5 style="margin-bottom: 20px;" >Dados do Aluno</h5></hr>
+                  <div class="form-group col-md-12">
+                          <label for="inputCpf">Nome completo</label>
+                          <input type="text" class="form-control" id="cpf" placeholder="nome"  name="nome">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                          <label for="inputCpf">CPF</label>
+                          <input type="text" class="form-control" id="cpf" placeholder="CPF"  name="cpf">
+                  </div>
+                  <div class="form-group col-md-6">
+                          <label for="inputRG">RG</label>
+                          <input type="text" class="form-control" id="rg"  >
+                  </div>
+
+                  <div class="form-group col-md-6">
+                          <label for="dnasc">Nascimento</label>
+                          <input type="text" class="form-control" id="dnasc" data-mask="00/00/0000"  reverse="true">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="sexo">Sexo</label>
+                    <select id="sexo" class="form-control">
+                      <option></option>
+                      <option>Masculino</option>
+                      <option>Feminino</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="estado_civil">Estado Civil</label>
+                    <select id="estado_civil" class="form-control">
+                      <option></option>
+                      <option>Casado</option>
+                      <option>Solteiro</option>
+                      <option>União Estável</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="profissao">Profissão</label>
+                    <select id="profissao" class="form-control">
+                      <option></option>
+                      <option>Masculino</option>
+                      <option>Feminino</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="inputEmail4">Telefone fixo</label>
+                    <input type="text" class="form-control" id="tel"  name="phone-number">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="inputEmail4">Celular</label>
+                    <input type="text" class="form-control" id="celular"  name="celular-number">
+                  </div>
+
+                  <div class="form-group col-md-6">
+                      <label for="inputEmail">Email</label>
+                      <input type="email" class="form-control" id="email" placeholder="" >
+                  </div>
+
+                  <div class="form-group col-md-6">
+                      <label for="instagram">Instagram</label>
+                      <input type="text" class="form-control" id="instagram"  >
+                  </div>
+
+                  <div class="form-group col-md-6">
+                      <label for="facebook">Facebook</label>
+                      <input type="text" class="form-control" id="facebook"  >
+                  </div>
+
+                  <div class="form-group col-md-6">
+
+                  </div>
+
+
+                  <button type="button" class="btn btn-primary" id="btnParte1" onclick="nextParte1">Avançar</button>
+
+                </div>
+
+            </div>
+
+
+            <div id="parte2" style="display:none;>
+
+              <div class="form-row">
+
+                <div class="form-group col-md-12">
+                  <label for="logradouro">Endereço</label>
+                  <input type="text" class="form-control" id="logradouro" placeholder="" >
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="nr">Número</label>
+                  <input type="text" class="form-control" id="nr" placeholder="">
+                </div>
+
+                <div class="form-group col-md-12">
+                  <label for="compl">Complemento</label>
+                  <input type="text" class="form-control" id="compl" placeholder="">
+                </div>
+
+
+                <div class="form-group col-md-12">
+                  <label for="bairro">Bairro</label>
+                  <input type="text" class="form-control" id="bairro" placeholder="">
+                </div>
+
+
+                <div class="form-group col-md-12">
+                  <label for="cidade">Cidade</label>
+                  <input type="text" class="form-control" id="cidade">
+                </div>
+
+
+                <div class="form-group col-md-12">
+                  <label for="estado">Estado</label>
+                  <select id="estado" class="form-control">
+                      <option value="ac">Acre</option>
+                      <option value="al">Alagoas</option>
+                      <option value="am">Amazonas</option>
+                      <option value="ap">Amapá</option>
+                      <option value="ba">Bahia</option>
+                      <option value="ce">Ceará</option>
+                      <option value="df">Distrito Federal</option>
+                      <option value="es">Espírito Santo</option>
+                      <option value="go">Goiás</option>
+                      <option value="ma">Maranhão</option>
+                      <option value="mt">Mato Grosso</option>
+                      <option value="ms">Mato Grosso do Sul</option>
+                      <option value="mg">Minas Gerais</option>
+                      <option value="pa">Pará</option>
+                      <option value="pb">Paraíba</option>
+                      <option value="pr">Paraná</option>
+                      <option value="pe">Pernambuco</option>
+                      <option value="pi">Piauí</option>
+                      <option value="rj">Rio de Janeiro</option>
+                      <option value="rn">Rio Grande do Norte</option>
+                      <option value="ro">Rondônia</option>
+                      <option value="rs">Rio Grande do Sul</option>
+                      <option value="rr">Roraima</option>
+                      <option value="sc">Santa Catarina</option>
+                      <option value="se">Sergipe</option>
+                      <option value="sp">São Paulo</option>
+                      <option value="to">Tocantins</option>
+                  </select>
+                </div>
+
+                <div class="form-group col-md-12">
+                  <label for="cep">Cep</label>
+                  <input type="text" class="form-control" id="cep" name="cep">
+                </div>
+
+                <button type="button" class="btn btn-primary" id="btnParte2" onclick="nextParte2">Avançar</button>
+
+              </div>
+
+            </div>
+
+
+            <div id="parte3" style="display:none">
+
+              <div class="form-row" >
+
+                <div class="form-group col-md-12">
+
+                    <div class="form-check">
+                      <p>Qual treinamento vai escolher?</p>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Treinamento</th>
+                            <th scope="col">Detalhes</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row"><input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked></th>
+                            <td>Leader Training 55</td>
+                            <td>Este treinamento acontecerá nos dias 29-30-31 de Março de 2019 no Hotel Fazenda Vale Amanhecer, à rua Teófilo Otoni, 91 - Fernão Dias - Igarapé/MG. Site: www.valeamanhecer.com.br. Dúvidas ligue para (31) 9842-0123 ou envie um e-mail para koi@institutokoi.com.br.</td>
+                          </tr>
+                          <tr>
+                            <th scope="row"><input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked></th>
+                            <td>Renascimento - 02</td>
+                            <td>Thornton</td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+
+                    </div>
+
+                    <button type="button" class="btn btn-primary" id="btnParte3" onclick="nextParte3">Avançar</button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div id="parte4" style="display:none">
+
+              <div class="card" style="margin-top:-18px;">
+                <div class="card-body">
+                  <img src="https://stc.pagseguro.uol.com.br/pagseguro/i/logos/logo_pagseguro244x50.png" width="171" heigth="35" alt="" style="margin-bottom: 10px;">
+
+                  <p><b><h5 class="card-title">Resumo de compra</h5></b></p>
+
+                  <b><p class="card-text"><b>Leader Training 55.</b></p></b>
+
+                  <div style="margin-top:5px;">
+                    <b><span><strong>Condições:</strong></span></b><br>
+                    <span>Autorizo o PagSeguro a debitar os próximos pagamentos para INSTITUTO KOI DE DESENVOLVIMENTO HUMANO LTDA diretamente em meu cartão de crédito de acordo com as seguintes condições:</span>
+                  </div>
+
+                  <div style="margin-top:15px;">
+                    <b><span><strong>Valor a pagar:</strong></span></b><br>
+                    <span>Valor de cada pagamento R$ 400,00 (3x)</span><br>
+                  </div>
+
+                  <div style="margin-top:10px;">
+                    <b><span><strong>Períodicidade:</strong></span></b><br>
+                    <span>Pagamento mensal, todo da 3</span><br>
+                  </div>
+
+                  <div style="float: right; margin-top: 15px; font-size: 11px;">
+                      <span>Esta assinatura está sendo feita no <strong>Brasil.</strong></span>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="card" style="margin-top:12px;">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+
+                      <div class="form-group">
+                          <label for="inputEmail">Número do cartão</label>
+                          <div style="display: block;">
+                          <input type="text" class="form-control" id="nrCartao" placeholder="" >
+                          <div>
+                            <img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/42x20/visa.png" alt="" >
+                            <img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/42x20/mastercard.png" alt="" >
+                            <img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/42x20/amex.png" alt="" >
+                            <img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/42x20/diners.png" alt="" >
+                            <img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/42x20/elo.png" alt="" >
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-4">
+                      <div class="form-group">
+                          <label for="inputEmail">Data de validade</label>
+                          <div style="display: flex; flex-direction: row; ">
+                            <input type="email" class="form-control" id="email" placeholder="MM" style="margin-right:3px;">
+                            <input type="email" class="form-control" id="email" placeholder="AA" >
+                          </div>
+
+                      </div>
+                    </div>
+
+
+                  </div>
+
+                  <div class="row">
+                    <div class="col">
+
+                      <div class="form-group">
+                          <label for="inputEmail">Nome do dono do cartão</label>
+                          <input type="email" class="form-control" id="email" placeholder="" >
+                      </div>
+
+                    </div>
+
+                    <div class="col-4">
+                      <div class="form-group">
+                          <label for="inputEmail">Código de segurança</label>
+                          <input type="email" class="form-control" id="email" placeholder="" >
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6">
+
+                      <div class="form-group">
+                          <label for="inputEmail">CPF do dono do cartão</label>
+                          <input type="email" class="form-control" id="email" placeholder="" >
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div style="float: right;">
+                      <button type="button" class="btn btn-success" id="btnPagtoConfirmar" onclick="btnPagtoConfirmar">Confirmar o pagamento</button>
+                  </div>
+
+                  <div style="float: top;">
+                      <button type="button" class="btn " id="btnPagtoVoltar" onclick="nextParte2">voltar</button>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+        </form>
+      </div>
+    </div>
+
+
+
+
+    <!--@each( o in dados)
+    The request URL is {{ o.nome }}
+    <br>
+    <h2>Meu nome: {{o.nome}}</h2>
+    @endeach
+     Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+
+    <script src="https://assets.pagar.me/pagarme-js/3.1/pagarme.min.js" />
+
+    <script>
+
+
+        $(document).ready(function(){
+          $('input[name="date"]').mask('00/00/0000');
+          $('input[name="postal-code"]').mask('S0S 0S0');
+          $('input[name="phone-number"]').mask('(00) 0000 - 0000');
+          $('input[name="celular-number"]').mask('(00) 0000 - 00000');
+          $('input[name="cpf"]').mask('000.000.000-00');
+          $('input[name="cep"]').mask('00.000-000');
+
+          $('input[name="postal-code"]').focusout(function() {
+            $('input[name="postal-code"]').val( this.value.toUpperCase() );
+          });
+
+          $( "#btnParte1" ).click(function( event ) {
+            console.log('onclick')
+            event.preventDefault();
+            $("#parte1").css("display","none")
+            $("#parte2").css("display","block")
+            $("#parte3").css("display","none")
+            $("#parte4").css("display","none")
+
+            $("#titulo").css("display","block")
+
+            $(".formContent").css("width", "28rem")
+          })
+
+          $( "#btnParte2" ).click(function( event ) {
+            console.log('onclick')
+            event.preventDefault();
+            $("#parte1").css("display","none")
+            $("#parte2").css("display","none")
+            $("#parte3").css("display","block")
+            $("#parte4").css("display","none")
+
+            $("#titulo").css("display","block")
+
+            $(".formContent").css("width", "58rem")
+          })
+
+          $( "#btnParte3" ).click(function( event ) {
+            console.log('onclick')
+            event.preventDefault();
+            $("#parte1").css("display","none")
+            $("#parte2").css("display","none")
+            $("#parte3").css("display","none")
+            $("#parte4").css("display","block")
+
+            $("#titulo").css("display","none")
+
+            $(".formContent").css("width", "38rem")
+          })
+
+          $( "#btnPagtoVoltar" ).click(function( event ) {
+            console.log('onclick')
+            event.preventDefault();
+            $("#parte1").css("display","none")
+            $("#parte2").css("display","none")
+            $("#parte3").css("display","block")
+            $("#parte4").css("display","none")
+
+            $("#titulo").css("display","block")
+
+            $(".formContent").css("width", "58rem")
+          })
+
+          $( "#btnPagtoConfirmar" ).click(function( event ) {
+            console.log('onclick')
+            event.preventDefault();
+
+            alert('confirmar pagamento')
+          })
+
+          /* Sessão */
+          $( "#btnSessao" ).click(function( event ) {
+            console.log('onclick')
+
+            const config = {
+              headers: {
+                'Content-Type': 'application/json;charset=ISO-8859-1',
+                Accept: 'application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1'
+              }
+            }
+
+            const url = "http://127.0.0.1:3333/pagSeguro/session"
+            const data = null
+
+            return axios
+              .post(url, data)
+              .then(res => {
+                  console.log('sessao: ', res.data)
+                  $("#__session").val(res.data)
+                })
+                .catch(e => {
+                  console.log('falha ', e)
+                  $("#__session").val('')
+                })
+              })
+
+          /*
+          PagSeguroDirectPayment.setSessionId('342122bfb82549f3a89910bc427c0939');
+
+          PagSeguroDirectPayment.onSenderHashReady(function(response){
+              if(response.status == 'error') {
+                  console.log(response.message);
+                  return false;
+              }
+              var hash = response.senderHash; console.log(hash);
+          })
+
+          PagSeguroDirectPayment.createCardToken({
+            cardNumber: '4111111111111111', // Número do cartão de crédito
+            brand: 'visa', // Bandeira do cartão
+            cvv: '123', // CVV do cartão
+            expirationMonth: '12', // Mês da expiração do cartão
+            expirationYear: '2030', // Ano da expiração do cartão, é necessário os 4 dígitos.
+            success: function(response) {
+                console.log('success ', response)
+            },
+            error: function(response) {
+              console.log('error ', response)
+            },
+            complete: function(response) {
+                  // Callback para todas chamadas.
+            }
+          });
+          */
+
+        })
+
+    </script>
+
+  </body>
+</html>

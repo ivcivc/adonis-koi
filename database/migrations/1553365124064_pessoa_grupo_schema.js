@@ -7,10 +7,6 @@ class PessoaGrupoSchema extends Schema {
   up () {
     this.create('pessoa_grupo', table => {
       table.increments()
-      table
-        .string('nome', 20)
-        .notNullable()
-        .unique()
 
       table
         .integer('pessoa_id')

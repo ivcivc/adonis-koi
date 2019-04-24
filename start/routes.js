@@ -3,6 +3,34 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
+/* const form = use('App/Views/form.html')
+
+Route.get('/form', () => {
+  return form
+}) */
+
+Route.get('/form', ({ view }) => {
+  let nomes = [{ nome: 'Ivan' }, { nome: 'Carlos' }]
+
+  return view.render('home', { dados: nomes, sessao: null })
+})
+
+// Pagseguro
+Route.post('/pagSeguro/session', 'PagSeguroController.session')
+Route.post('/pagSeguro/addPlano', 'PagSeguroController.addPlano')
+Route.post('/pagSeguro/addAdesao', 'PagSeguroController.addAdesao')
+Route.get('/pagSeguro/consultarPlanos', 'PagSeguroController.consultarPlanos')
+Route.post('/pagSeguro/notificacao', 'PagSeguroController.notificacao')
+Route.get(
+  '/pagSeguro/listarOrdemsPagamento',
+  'meioPagamentoController.pagSeguro.listarOrdemsPagamento'
+)
+
+// PagarMe
+Route.post('/pagarMe/addPlano', 'pagarMeController/PagarMe.addPlano')
+
+Route.get('ps', 'LocalController.index')
+
 // Route.post('users', 'UserController.store')
 Route.post('sessions', 'SessionController.store')
 Route.post('validateToken', 'SessionController.validateToken')
@@ -79,3 +107,7 @@ Route.get('logout', async ({ auth, response }) => {
     response.send('falha no logout')
   }
 })
+
+Route.resource('/pessoas', 'PessoaController')
+  .apiOnly() // .except(['index']) nao incluir esta rota
+  .middleware('auth')

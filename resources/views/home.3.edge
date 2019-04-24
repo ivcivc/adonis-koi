@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+    <title>Koi</title>
+
+  </head>
+  <body>
+
+      <div id="form">
+          Número do cartão: <input type="text" id="card_number"/>
+          <br/>
+          Nome (como escrito no cartão): <input type="text" id="card_holder_name"/>
+          <br/>
+          Mês de expiração: <input type="text" id="card_expiration_month"/>
+          <br/>
+          Ano de expiração: <input type="text" id="card_expiration_year"/>
+          <br/>
+          Código de segurança: <input type="text" id="card_cvv"/>
+          <br/>
+          <div id="field_errors">
+          </div>
+          <br/>
+      </div>
+
+      <form id="payment_form" action="http://127.0.0.1:3333/form" method="POST">
+          <input type="submit"></input>
+      </form>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://assets.pagar.me/pagarme-js/3.1/pagarme.min.js"></script>
+
+    <script>
+
+      $(document).ready(function() {
+          var form = $("#payment_form")
+
+          form.submit(function(event) {
+              event.preventDefault();
+              var card = {}
+              card.card_holder_name = $("#form #card_holder_name").val()
+              card.card_expiration_date = $("#form #card_expiration_month").val() + '/' + $("#form #card_expiration_year").val()
+              card.card_number = $("#form #card_number").val()
+              card.card_cvv = $("#form #card_cvv").val()
+
+              console.log(card)
+
+              // pega os erros de validação nos campos do form e a bandeira do cartão
+              var cardValidations = pagarme.validate({card: card})
+
+              //Então você pode verificar se algum campo não é válido
+              if(!cardValidations.card.card_number) {
+                console.log('Oops, número de cartão incorreto')
+                return false
+              }
+
+
+              //Mas caso esteja tudo certo, você pode seguir o fluxo
+              pagarme.client.connect({ encryption_key: 'ek_test_TxvV3gxuWqBTlUTNiQUgBiaCMVEZQO' })
+                .then(client => client.security.encrypt(card))
+                .then(card_hash => console.log(card_hash))
+                // o próximo passo aqui é enviar o card_hash para seu servidor, e
+                // em seguida criar a transação/assinatura
+
+              return false
+          })
+      });
+
+
+    </script>
+
+  </body>
+</html>
