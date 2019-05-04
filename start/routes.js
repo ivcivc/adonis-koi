@@ -26,20 +26,29 @@ Route.get(
   'meioPagamentoController.pagSeguro.listarOrdemsPagamento'
 )
 
+Route.get(
+  '/galaxPay/getCliente',
+  'meioPagamentoController/galaxPay/GalaxPay.getCliente'
+)
+
 // PagarMe
 Route.post('/pagarMe/addPlano', 'pagarMeController/PagarMe.addPlano')
 
 Route.get('ps', 'LocalController.index')
 
 // Route.post('users', 'UserController.store')
-Route.post('sessions', 'SessionController.store')
+Route.post('sessions', 'SessionController.store').validator('Session')
 Route.post('validateToken', 'SessionController.validateToken')
 
 // Route.get('users', 'UserController.index').middleware(['auth'])
 
 Route.resource('/users', 'UserController')
   .apiOnly() // .except(['index']) nao incluir esta rota
-  .middleware('auth')
+  .validator(new Map([[['/users.store'], ['User']]]))
+// .except(['store'])
+// .middleware('auth')
+
+// Route.post('/users', 'UserController.store').validator('User')
 
 // Route.get('roles', 'RoleController.index').middleware(['auth:jwt'])
 // Route.put('roles/:id', 'RoleController.update')
@@ -58,9 +67,13 @@ Route.post('permissions', 'PermissionController.store')
 Route.put('permissions/:id', 'PermissionController.update')
 Route.delete('permissions/:id', 'PermissionController.destroy')
 
-Route.post('passwords', 'ForgotPasswordController.store')
+Route.post('passwords', 'ForgotPasswordController.store').validator(
+  'ForgotPassword'
+)
 
-Route.put('passwords', 'ForgotPasswordController.update')
+Route.put('passwords', 'ForgotPasswordController.update').validator(
+  'ResetPassword'
+)
 
 Route.get('oi', () => {
   return {
@@ -109,5 +122,15 @@ Route.get('logout', async ({ auth, response }) => {
 })
 
 Route.resource('/pessoas', 'PessoaController')
-  .apiOnly() // .except(['index']) nao incluir esta rota
-  .middleware('auth')
+  .apiOnly()
+  .validator(
+    new Map([
+      [['/pessoas.store'], ['pessoa/Add']],
+      [['/pessoas.store'], ['pessoa/Endereco']]
+    ])
+  )
+// .except(['store'])
+
+// Route.post('/pessoas', 'PessoaController.store').validator('pessoa/Add')
+
+//

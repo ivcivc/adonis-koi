@@ -9,8 +9,14 @@ class Pessoa extends Model {
   }
 
   grupos () {
-    return this.hbelongsToasOne('App/Models/Grupo')
+    return this.belongsToMany('App/Models/Grupo').pivotModel(
+      'App/Models/PessoaGrupo'
+    )
   }
+
+  /* user() {
+    return this.belongsTo('App/Models/User')
+  } */
 }
 
 module.exports = Pessoa

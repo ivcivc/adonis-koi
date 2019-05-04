@@ -21,7 +21,7 @@ class PessoaSchema extends Schema {
 
       table.string('rg', 12)
 
-      table.string('sexo', 9).notNullable()
+      table.string('sexo', 9)
 
       table.string('camisa', 10)
 
@@ -46,6 +46,8 @@ class PessoaSchema extends Schema {
       table.string('facebook')
 
       table.string('instagram')
+
+      table.text('nota')
 
       table.timestamps()
     })

@@ -3,7 +3,7 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class EnderecoSchema extends Schema {
+class EnderecoPessoaSchema extends Schema {
   up () {
     this.create('enderecos', table => {
       table.increments()
@@ -41,4 +41,4 @@ class EnderecoSchema extends Schema {
   }
 }
 
-module.exports = EnderecoSchema
+module.exports = EnderecoPessoaSchema
