@@ -1,92 +1,93 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with tiponegociacaos
- */
+const TipoNegociacao = use('App/Models/TipoNegociacao')
 class TipoNegociacaoController {
-  /**
-   * Show a list of all tiponegociacaos.
-   * GET tiponegociacaos
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index ({ request }) {
+    const status = request.input('status')
+    const nome = request.input('nome')
+    const sortSelector = request.input('sortSelector')
+    const sortDirection = request.input('sortDirection')
+
+    const query = TipoNegociacao.query()
+
+    if (nome) {
+      query.where('nome', 'LIKE', '%' + nome + '%')
+    }
+
+    if (status) {
+      query.where('status', 'LIKE', status)
+    }
+    if (sortSelector) {
+      query.orderBy(sortSelector, sortDirection)
+    } else {
+      query.orderBy('nome', 'ASC')
+    }
+
+    const dados = await query.paginate()
+    return dados
   }
 
-  /**
-   * Render a form to be used for creating a new tiponegociacao.
-   * GET tiponegociacaos/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new tiponegociacao.
-   * POST tiponegociacaos
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async store ({ request, response }) {
+    const dados = request.all()
+
+    try {
+      const tipoNegociacao = await TipoNegociacao.create(dados)
+      return tipoNegociacao
+    } catch (error) {
+      console.log(error)
+      return response
+        .status(400)
+        .send('Não foi possível criar um Tipo de Negociacao.')
+    }
   }
 
-  /**
-   * Display a single tiponegociacao.
-   * GET tiponegociacaos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async show ({ params, response }) {
+    try {
+      return await TipoNegociacao.findOrFail(params.id)
+    } catch (error) {
+      return response
+        .status(400)
+        .send('Não foi possível exibir o Tipo de Negociacao solicitado.')
+    }
   }
 
-  /**
-   * Render a form to update an existing tiponegociacao.
-   * GET tiponegociacaos/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update tiponegociacao details.
-   * PUT or PATCH tiponegociacaos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async update ({ params, request, response }) {
+    const dados = request.all()
+    try {
+      let tipoNegociacao = await TipoNegociacao.findOrFail(params.id)
+      tipoNegociacao.merge(dados)
+      await tipoNegociacao.save()
+      return tipoNegociacao
+    } catch (e) {
+      if (e.name === 'ModelNotFoundException') {
+        return response
+          .status(400)
+          .send({ message: 'Tipo de Negociacao não localizado!' })
+      }
+
+      if (e.name === 'TypeError') {
+        return response.status(400).send({ message: e.message })
+      } else {
+        switch (e.code) {
+          case 'ER_DUP_ENTRY':
+            return response
+              .status(400)
+              .send({ message: 'Duplicidade de registro detectada.' })
+        }
+      }
+      return response.status(400).send(e.message)
+    }
   }
 
-  /**
-   * Delete a tiponegociacao with id.
-   * DELETE tiponegociacaos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, response }) {
+    const id = params.id
+    try {
+      const tipoNegociacao = await TipoNegociacao.find(id)
+      await tipoNegociacao.delete()
+      return response.status(200).send('Excluído com sucesso!')
+    } catch (error) {
+      return response.status(400).send('Não foi possível excluir.')
+    }
   }
 }
 

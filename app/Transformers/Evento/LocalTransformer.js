@@ -3,12 +3,12 @@
 const BumblebeeTransformer = use('Bumblebee/Transformer')
 
 /**
- * GrupoTransformer class
+ * LocalTransformer class
  *
- * @class GrupoTransformer
+ * @class LocalTransformer
  * @constructor
  */
-class GrupoTransformer extends BumblebeeTransformer {
+class LocalTransformer extends BumblebeeTransformer {
   /**
    * This method is used to transform the data.
    */
@@ -20,4 +20,4 @@ class GrupoTransformer extends BumblebeeTransformer {
   }
 }
 
-module.exports = GrupoTransformer
+module.exports = LocalTransformer

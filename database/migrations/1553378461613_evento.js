@@ -14,23 +14,24 @@ class EventoSchema extends Schema {
         .unique()
 
       table.string('status', 10).notNullable()
-      table.decimal('capacidade', 3)
 
       table
         .integer('local_id')
         .unsigned()
+        .notNullable()
         .references('id')
         .inTable('locals')
         .onUpdate('CASCADE')
-        .onDelete('SET NULL')
+        .onDelete('RESTRICT')
 
       table
         .integer('treinamento_id')
         .unsigned()
+        .notNullable()
         .references('id')
         .inTable('treinamentos')
         .onUpdate('CASCADE')
-        .onDelete('SET NULL')
+        .onDelete('RESTRICT')
 
       table.date('dInicio')
       table.date('dTermino')
@@ -38,6 +39,11 @@ class EventoSchema extends Schema {
       table.float('valorBase').default(0.0)
 
       table.text('obs')
+
+      table.string('siteExibir').notNullable()
+      table.integer('siteParcelas')
+      table.string('siteEvento').notNullable()
+      table.text('siteDetalhes')
 
       table.timestamps()
     })

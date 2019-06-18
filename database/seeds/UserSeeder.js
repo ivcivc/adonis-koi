@@ -12,6 +12,7 @@
 const User = use('App/Models/User')
 const Role = use('Adonis/Acl/Role')
 const Permission = use('Adonis/Acl/Permission')
+const Grupo = use('App/Models/Grupo')
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 
@@ -108,6 +109,18 @@ class UserSeeder {
     const user2 = await User.find(2)
     // ['create_users', 'update_users', 'delete_users', 'read_users']
     console.log(await user2.getPermissions())
+
+    const grupo1 = await new Grupo()
+    grupo1.nome = 'ALUNO'
+    await grupo1.save()
+
+    const grupo2 = await new Grupo()
+    grupo2.nome = 'CONSULTOR'
+    await grupo2.save()
+
+    const grupo3 = await new Grupo()
+    grupo3.nome = 'FORNECEDOR'
+    await grupo3.save()
 
     /*
     const permissaoAdm = await Permission.create({

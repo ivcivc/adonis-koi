@@ -56,14 +56,14 @@ class SiteSchema extends Schema {
       table.string('faturaToken').index()
       table.string('faturaHash').index()
 
-      table
+      /* table
         .integer('evento_id')
         .unsigned()
         .references('id')
         .inTable('eventos')
         .onUpdate('CASCADE')
         .onDelete('SET NULL')
-        .notNullable()
+        .notNullable() */
 
       table.timestamps()
     })

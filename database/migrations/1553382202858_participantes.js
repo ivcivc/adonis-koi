@@ -11,44 +11,58 @@ class ParticipantesSchema extends Schema {
       table
         .integer('evento_id')
         .unsigned()
+        .notNullable()
         .references('id')
         .inTable('eventos')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-        .notNullable()
 
       table
         .integer('pessoa_id')
         .unsigned()
+        .notNullable()
         .references('id')
         .inTable('pessoas')
         .onUpdate('CASCADE')
-        .onDelete('SET NULL')
+        .onDelete('RESTRICT')
 
       table
         .integer('consultor_id')
         .unsigned()
+        .default(null)
         .references('id')
         .inTable('pessoas')
         .onUpdate('CASCADE')
-        .onDelete('SET NULL')
+        .onDelete('RESTRICT')
 
-      table.boolean('pagarConsultor').notNullable()
       table
-        .boolean('TreinamentoConcluido')
+        .boolean('treinamentoConcluido')
         .notNullable()
         .default(false)
 
-      table.decimal('parcelas', 2)
-      table.float('total', 8, 2)
+      table.integer('parcelas')
+      table.float('valorBase', 8, 2)
 
       table
-        .integer('TipoNegociacao_id')
+        .boolean('pagarConsultor')
+        .notNullable()
+        .default(false)
+      table.float('percentConsultor', 8, 2)
+      table.float('valorConsultor', 8, 2)
+
+      table
+        .string('status', 10)
+        .notNullable()
+        .default('ATIVO')
+
+      table
+        .integer('tipoNegociacao_id')
         .unsigned()
+        .notNullable()
         .references('id')
-        .inTable('TipoNegociacaos')
+        .inTable('tipo_negociacaos')
         .onUpdate('CASCADE')
-        .onDelete('SET NULL')
+        .onDelete('RESTRICT')
 
       table.timestamps()
     })

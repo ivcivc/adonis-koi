@@ -34,10 +34,51 @@ hooks.after.providersBooted(() => {
 
   const enderecoFn = async (data, field, message, args, get) => {
     const value = get(data, field)
+    let endereco = {}
+    endereco = value
+
     if (value === null) {
-      // eslint-disable-next-line no-throw-literal
-      throw 'Não é permitido um endereço nulo.'
+      endereco = {}
+    } else {
+      endereco = { endereco }
     }
+    const Joi = require('@hapi/joi')
+    const schema = Joi.object()
+      .keys({
+        endereco: {
+          logradouro: Joi.string()
+            .required()
+            .error(new Error('o logradouro é obrigatório')),
+          compl: Joi.string()
+            .empty('')
+            .error(new Error('O complemento não pode ser nulo')),
+          bairro: Joi.string()
+            .required()
+            .error(new Error('O bairro é obrigatório')),
+          cep: Joi.string()
+            .required()
+            .error(new Error('O cep obrigatório'))
+            .min(8)
+            .error(new Error('O cep deve ter pelo menos 8 dígitos.')),
+          cidade: Joi.string()
+            .required()
+            .error(new Error('A cidade é obrigatória')),
+          estado: Joi.string()
+            .required()
+            .error(new Error('Estado obrigatório (2 dígitos)'))
+            .min(2)
+            .max(2)
+            .error(new Error('Estado deve ter 2 dígitos.'))
+        }
+      })
+      .optionalKeys('endereco')
+
+    const { error } = Joi.validate(endereco, schema)
+
+    if (error) {
+      throw error.message
+    }
+
     if (!value) {
     }
   }

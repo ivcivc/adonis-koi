@@ -66,21 +66,6 @@
   <body>
 
 
-    <!-- INICIO FORMULARIO BOTAO PAGSEGURO: NAO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
-    <form action="https://pagseguro.uol.com.br/pre-approvals/request.html" method="post">
-      <input type="hidden" name="code" value="36849B3CBEBECE4EE4A71F9C8D0DE443" />
-      <input type="hidden" name="iot" value="button" />
-      <input type="image" src="https://stc.pagseguro.uol.com.br/public/img/botoes/assinaturas/209x48-assinar-assina.gif" name="submit" alt="Pague com PagSeguro - É rápido, grátis e seguro!" width="209" height="48" />
-    </form>
-    <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
-
-
-
-    sessao: {{sessao}}
-
-
-    <button type="button" class="btn btn-primary" id="btnSessao" onclick="btnSessao">Sessao no servidor</button>
-
     <div class="freebirdFormviewerViewFormBanner freebirdHeaderMast"></div>
 
     <div class="card formContent" style="width: 58rem;">
@@ -173,7 +158,7 @@
                   </div>
 
 
-                  <button type="button" class="btn btn-primary" id="btnParte1" onclick="nextParte1">Avançar</button>
+                  <button type="button" class="btn btn-primary" id="btnParte1" >Avançar</button>
 
                 </div>
 
@@ -250,7 +235,7 @@
                   <input type="text" class="form-control" id="cep" name="cep">
                 </div>
 
-                <button type="button" class="btn btn-primary" id="btnParte2" onclick="nextParte2">Avançar</button>
+                <button type="button" class="btn btn-primary" id="btnParte2" >Avançar</button>
 
               </div>
 
@@ -290,7 +275,7 @@
 
                     </div>
 
-                    <button type="button" class="btn btn-primary" id="btnParte3" onclick="nextParte3">Avançar</button>
+                    <button type="button" class="btn btn-primary" id="btnParte3" >Avançar</button>
 
                 </div>
 
@@ -400,7 +385,7 @@
                   </div>
 
                   <div style="float: top;">
-                      <button type="button" class="btn " id="btnPagtoVoltar" onclick="nextParte2">voltar</button>
+                      <button type="button" class="btn " id="btnPagtoVoltar" >voltar</button>
                   </div>
 
                 </div>
@@ -426,16 +411,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
 
-    <script src="https://assets.pagar.me/pagarme-js/3.1/pagarme.min.js" />
 
     <script>
 
 
         $(document).ready(function(){
+
           $('input[name="date"]').mask('00/00/0000');
           $('input[name="postal-code"]').mask('S0S 0S0');
           $('input[name="phone-number"]').mask('(00) 0000 - 0000');

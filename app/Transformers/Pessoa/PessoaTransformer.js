@@ -27,6 +27,7 @@ class PessoaTransformer extends BumblebeeTransformer {
       cracha: model.cracha,
       cep: model.cep,
       rg: model.rg,
+      cpf: model.cpf,
       sexo: model.sexo,
       camisa: model.camisa,
       estado_civil: model.estado_civil,
@@ -40,7 +41,9 @@ class PessoaTransformer extends BumblebeeTransformer {
       email2: model.email2,
       facebook: model.facebook,
       instagram: model.instagram,
-      nota: model.nota
+      skype: model.skype,
+      nota: model.nota,
+      situacao: model.situacao
     }
   }
 

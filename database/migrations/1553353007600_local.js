@@ -16,9 +16,9 @@ class LocalSchema extends Schema {
       table.string('status', 10).notNullable()
       table.string('contato', 20)
 
-      table.string('tel_resid', 11)
-
       table.string('tel_com', 11)
+
+      table.string('tel_com2', 11)
 
       table.string('tel_celular', 11)
 
@@ -27,12 +27,13 @@ class LocalSchema extends Schema {
       table.string('email')
 
       table.string('logradouro', 50)
-      table.string('nr', 10)
       table.string('compl', 15)
       table.string('bairro', 20)
       table.string('cidade', 20)
       table.string('estado', 2)
       table.string('cep', 8)
+
+      table.string('nota', 8)
 
       table.timestamps()
     })

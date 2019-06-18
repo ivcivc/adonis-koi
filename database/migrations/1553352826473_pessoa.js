@@ -47,7 +47,14 @@ class PessoaSchema extends Schema {
 
       table.string('instagram')
 
+      table.string('skype')
+
       table.text('nota')
+
+      table
+        .string('situacao', 12)
+        .notNullable()
+        .default('ATIVO')
 
       table.timestamps()
     })

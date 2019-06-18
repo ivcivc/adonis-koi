@@ -1,92 +1,80 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Treinamento = use('App/Models/Treinamento')
 
 /**
  * Resourceful controller for interacting with treinamentos
  */
 class TreinamentoController {
-  /**
-   * Show a list of all treinamentos.
-   * GET treinamentos
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index ({ request, response }) {
+    const status = request.input('status')
+
+    const query = Treinamento.query()
+
+    if (status) {
+      query.where('status', 'LIKE', status)
+    }
+
+    const dados = await query.paginate()
+    return dados
   }
 
-  /**
-   * Render a form to be used for creating a new treinamento.
-   * GET treinamentos/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new treinamento.
-   * POST treinamentos
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async store ({ request, response }) {
+    const { nome, valor, status } = request.all()
+
+    try {
+      const treinamento = await Treinamento.create({ nome, valor, status })
+      return treinamento
+    } catch (error) {
+      return response.status(400).send('Não foi possível criar um Treinamento.')
+    }
   }
 
-  /**
-   * Display a single treinamento.
-   * GET treinamentos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async show ({ params, request, response }) {
+    try {
+      return await Treinamento.findOrFail(params.id)
+    } catch (error) {
+      return response
+        .status(400)
+        .send('Não foi possível exibir o Treinamento solicitado.')
+    }
   }
 
-  /**
-   * Render a form to update an existing treinamento.
-   * GET treinamentos/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update treinamento details.
-   * PUT or PATCH treinamentos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async update ({ params, request, response }) {
+    const { nome, valor, status } = request.all()
+    try {
+      let treinamento = await Treinamento.findOrFail(params.id)
+      treinamento.merge({ nome, valor, status })
+      await treinamento.save()
+      return treinamento
+    } catch (e) {
+      if (e.name === 'ModelNotFoundException') {
+        return response.status(400).send('Treinamento não localizado!')
+      }
+
+      if (e.name === 'TypeError') {
+        return response.status(400).send(e.message)
+      } else {
+        switch (e.code) {
+          case 'ER_DUP_ENTRY':
+            return response
+              .status(400)
+              .send('Duplicidade de registro detectada.')
+        }
+      }
+      return response.status(400).send(e.message)
+    }
   }
 
-  /**
-   * Delete a treinamento with id.
-   * DELETE treinamentos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async destroy ({ params, request, response }) {
+    const id = params.id
+    try {
+      const treinamento = await Treinamento.find(id)
+      await treinamento.delete()
+      return response.status(200).send('Excluído com sucesso!')
+    } catch (error) {
+      return response.status(400).send('Não foi possível excluir.')
+    }
   }
 }
 

@@ -125,12 +125,47 @@ Route.resource('/pessoas', 'PessoaController')
   .apiOnly()
   .validator(
     new Map([
-      [['/pessoas.store'], ['pessoa/Add']],
-      [['/pessoas.store'], ['pessoa/Endereco']]
+      [['/pessoas.store'], ['pessoa/PessoaValidators']],
+      [['/pessoas.store'], ['pessoa/EnderecoValidators']],
+      [['/pessoas.update'], ['pessoa/PessoaUpdateValidators']],
+      [['/pessoas.update'], ['pessoa/EnderecoValidators']]
     ])
   )
+
+Route.resource('/treinamentos', 'TreinamentoController')
+  .apiOnly()
+  .validator(
+    new Map([
+      [['/treinamentos.store'], ['TreinamentoValidators']],
+      [['/treinamentos.update'], ['TreinamentoUpdateValidators']]
+    ])
+  )
+
+Route.resource('/locals', 'LocalController')
+  .apiOnly()
+  .validator(new Map([[['/locals.store'], ['LocalValidators']]]))
+
+Route.resource('/eventos', 'EventoController').apiOnly()
+Route.resource('/participantes', 'ParticipanteController').apiOnly()
+
+Route.resource('/tipoNegociacaos', 'TipoNegociacaoController').apiOnly()
+// .validator(new Map([[['/locals.store'], ['LocalValidators']]]))
+
 // .except(['store'])
 
 // Route.post('/pessoas', 'PessoaController.store').validator('pessoa/Add')
 
 //
+
+Route.post('/site', 'SiteController.addContrato')
+Route.put('/site', 'SiteController.updateContrato')
+
+/* Route.post('/receber', 'ReceberController.store')
+Route.put('/receber/:id', 'ReceberController.update')
+Route.delete('/receber/:id', 'ReceberController.destroy')
+Route.get('/receber/:id', 'ReceberController.show') */
+Route.resource('/receber', 'ReceberController').apiOnly()
+
+Route.resource('/receberItems', 'ReceberItemController').apiOnly()
+
+Route.resource('/contaReceber', 'ContaReceberController').apiOnly()

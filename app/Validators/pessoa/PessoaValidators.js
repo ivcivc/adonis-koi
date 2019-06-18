@@ -2,7 +2,7 @@
 
 const Antl = use('Antl')
 
-class pessoaAdd {
+class pessoaPessoaValidators {
   get validateAll () {
     return true
   }
@@ -15,10 +15,7 @@ class pessoaAdd {
       cracha: 'required|string',
       email: 'required|email:pessoas',
       dnasc: 'date',
-      grupo: 'required|array'
-      // endereco:
-      //  'required_with_all:endereco.logradouro,endereco.compl,endereco.bairro,endereco.cidade,endereco.estado,endereco.cep'
-      // 'endereco.*': 'exists:enderecos,logradouro,compl,bairro,cidade,estado,cep'
+      grupos: 'required|array'
     }
   }
 
@@ -27,4 +24,4 @@ class pessoaAdd {
   }
 }
 
-module.exports = pessoaAdd
+module.exports = pessoaPessoaValidators

@@ -1,157 +1,90 @@
 'use strict'
 
-// import pagseguro from 'pagseguro'
-let pagseguro = require('pagseguro')
+const Local = use('App/Models/Local')
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with locals
- */
 class LocalController {
-  /**
-   * Show a list of all locals.
-   * GET locals
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
-    console.log('rodando modulo pagto seguro')
+  async index ({ request, response }) {
+    const status = request.input('status')
+    const nome = request.input('nome')
+    const sortSelector = request.input('sortSelector')
+    const sortDirection = request.input('sortDirection')
 
-    try {
-      // eslint-disable-next-line new-cap
-      let pag = new pagseguro({
-        email: 'ivan.a.oliveira@terra.com.br',
-        token: '3ADCFD46A6BE4D9C84FE56DD1D773FAB',
-        mode: 'subscription' // 'sandbox'
-      })
-      console.log('rodando modulo pagto seguro 2')
-      // Configurando a moeda e a referência do pedido
-      pag.currency('BRL')
-      pag.reference('12345')
+    const query = Local.query()
 
-      // Configurando as informações do comprador
-      pag.buyer({
-        name: 'José Comprador',
-        email: 'c82212378446093264778@sandbox.pagseguro.com.br',
-        phoneAreaCode: '51',
-        phoneNumber: '12345678',
-        street: 'Rua Alameda dos Anjos',
-        number: '367',
-        complement: 'Apto 307',
-        district: 'Parque da Lagoa',
-        postalCode: '01452002',
-        city: 'São Paulo',
-        state: 'RS',
-        country: 'BRA'
-      })
-
-      console.log('rodando modulo pagto seguro 3')
-
-      // Configurando os detalhes da assinatura (ver documentação do PagSeguro para mais parâmetros)
-      pag.preApproval({
-        // charge: 'auto' para cobranças automáticas ou 'manual' para cobranças
-        // disparadas pelo seu back-end
-        // Ver documentação do PagSeguro sobre os tipos de cobrança
-        charge: 'manual',
-        // Título da assinatura (até 100 caracteres)
-        name: 'Assinatura de serviços',
-        // Descrição da assinatura (até 255 caracteres)
-        details: 'Assinatura mensal para prestação de serviço da loja modelo',
-        // Valor de cada pagamento
-        amountPerPayment: '50.00',
-        // Peridiocidade dos pagamentos: Valores: 'weekly','monthly','bimonthly',
-        // 'trimonthly','semiannually','yearly'
-        period: 'monthly',
-        // Data de expiração da assinatura (máximo 2 anos após a data inicial)
-        finalDate: '2019-10-09T00:00:00.000-03:00'
-      })
-
-      console.log('rodando modulo pagto seguro 4')
-
-      // Enviando o xml ao pagseguro
-      pag.send(function (err, res) {
-        if (err) {
-          console.log(err)
-          return err
-        }
-        console.log('send retornou: ', res)
-        return res
-      })
-    } catch (e) {
-      return e
+    if (nome) {
+      query.where('nome', 'LIKE', '%' + nome + '%')
     }
 
-    return true
+    if (status) {
+      query.where('status', 'LIKE', status)
+    }
+    if (sortSelector) {
+      query.orderBy(sortSelector, sortDirection)
+    } else {
+      query.orderBy('nome', 'ASC')
+    }
+
+    const dados = await query.paginate()
+    return dados
   }
 
-  /**
-   * Render a form to be used for creating a new local.
-   * GET locals/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {}
+  async store ({ request, response }) {
+    const dados = request.all()
 
-  /**
-   * Create/save a new local.
-   * POST locals
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {}
+    try {
+      const local = await Local.create(dados)
+      return local
+    } catch (error) {
+      return response.status(400).send('Não foi possível criar um Local.')
+    }
+  }
 
-  /**
-   * Display a single local.
-   * GET locals/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {}
+  async show ({ params, request, response }) {
+    try {
+      return await Local.findOrFail(params.id)
+    } catch (error) {
+      return response
+        .status(400)
+        .send('Não foi possível exibir o Local solicitado.')
+    }
+  }
 
-  /**
-   * Render a form to update an existing local.
-   * GET locals/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {}
+  async update ({ params, request, response }) {
+    const dados = request.all()
+    try {
+      let local = await Local.findOrFail(params.id)
+      local.merge(dados)
+      await local.save()
+      return local
+    } catch (e) {
+      if (e.name === 'ModelNotFoundException') {
+        return response.status(400).send('Local não localizado!')
+      }
 
-  /**
-   * Update local details.
-   * PUT or PATCH locals/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {}
+      if (e.name === 'TypeError') {
+        return response.status(400).send(e.message)
+      } else {
+        switch (e.code) {
+          case 'ER_DUP_ENTRY':
+            return response
+              .status(400)
+              .send('Duplicidade de registro detectada.')
+        }
+      }
+      return response.status(400).send(e.message)
+    }
+  }
 
-  /**
-   * Delete a local with id.
-   * DELETE locals/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {}
+  async destroy ({ params, response }) {
+    const id = params.id
+    try {
+      const local = await Local.find(id)
+      await local.delete()
+      return response.status(200).send('Excluído com sucesso!')
+    } catch (error) {
+      return response.status(400).send('Não foi possível excluir.')
+    }
+  }
 }
 
 module.exports = LocalController

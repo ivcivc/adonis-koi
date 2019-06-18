@@ -3,21 +3,22 @@
 const BumblebeeTransformer = use('Bumblebee/Transformer')
 
 /**
- * GrupoTransformer class
+ * TreinamentoTransformer class
  *
- * @class GrupoTransformer
+ * @class TreinamentoTransformer
  * @constructor
  */
-class GrupoTransformer extends BumblebeeTransformer {
+class TreinamentoTransformer extends BumblebeeTransformer {
   /**
    * This method is used to transform the data.
    */
   transform (model) {
     return {
       id: model.id,
-      nome: model.nome
+      nome: model.nome,
+      valor: model.valor
     }
   }
 }
 
-module.exports = GrupoTransformer
+module.exports = TreinamentoTransformer
