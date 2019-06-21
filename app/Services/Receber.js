@@ -5,11 +5,12 @@ const Model = use('App/Models/Receber')
 // const Database = use('Database')
 
 class Receber {
-  async add (payload) {
+  async add (payload, trx) {
     try {
-      const receber = await Model.create(payload)
+      const receber = await Model.create(payload, trx)
       await receber.load('pessoa')
-      await receber.load('evento')
+      // await receber.load('evento')
+      // await receber.load('participacao')
       await receber.load('receberItems')
 
       return receber
@@ -56,6 +57,7 @@ class Receber {
 
   async get (ID) {
     const receber = await Model.findOrFail(ID)
+
     return receber
   }
 
@@ -74,6 +76,7 @@ class Receber {
 
       query.with('receberItems')
       query.with('pessoa')
+      query.with('contaReceber')
 
       if (sortSelector) {
         query.orderBy(sortSelector, sortDirection)

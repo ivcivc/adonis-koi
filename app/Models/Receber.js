@@ -7,8 +7,11 @@ class Receber extends Model {
   pessoa () {
     return this.belongsTo('App/models/Pessoa', 'pessoa_id')
   }
-  evento () {
+  /* evento () {
     return this.belongsTo('App/models/Evento', 'evento_id')
+  } */
+  participante () {
+    return this.belongsTo('App/models/Participante', 'participante_id')
   }
 
   contaReceber () {

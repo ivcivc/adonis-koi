@@ -4,7 +4,7 @@ const Model = use('App/Models/Pessoa')
 const Database = use('Database')
 
 class Pessoa {
-  async add (data) {
+  async add (data, trx) {
     try {
       let endereco = null
 
@@ -17,15 +17,15 @@ class Pessoa {
       grupos = data.grupos
       delete data['grupos']
 
-      const pessoa = await Model.create(data)
+      const pessoa = await Model.create(data, trx)
 
       if (endereco) {
         endereco.nr = '.'
         endereco.pessoa_id = pessoa.id
-        await pessoa.endereco().create(endereco)
+        await pessoa.endereco().create(endereco, trx)
       }
 
-      await pessoa.grupos().attach(grupos, null)
+      await pessoa.grupos().attach(grupos, null, trx)
 
       return pessoa
     } catch (e) {

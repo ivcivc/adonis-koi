@@ -5,9 +5,9 @@ const Model = use('App/Models/ReceberItem')
 // const Database = use('Database')
 
 class ReceberItem {
-  async add (payload) {
+  async add (payload, trx) {
     try {
-      const registro = await Model.create(payload)
+      const registro = await Model.create(payload, trx)
       await registro.load('receber')
 
       return registro

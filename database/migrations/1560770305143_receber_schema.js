@@ -16,16 +16,18 @@ class ReceberSchema extends Schema {
       table.string('status', 15).notNullable()
       table.string('statusDescription')
       table.string('link')
+      table.float('liquido').default(0.0)
+      table.float('desconto').default(0.0)
       table.float('value').default(0.0)
       table.string('brand', 15)
       table.string('operator', 10)
       table.string('operatorName', 20)
 
       table
-        .integer('evento_id')
+        .integer('participante_id')
         .unsigned()
         .references('id')
-        .inTable('eventos')
+        .inTable('participantes')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT')
 

@@ -11,6 +11,10 @@ class Participante extends Model {
     return this.belongsTo('App/models/Evento')
   }
 
+  participante () {
+    return this.belongsTo('App/models/Participante')
+  }
+
   consultor () {
     return this.belongsTo('App/models/Pessoa', 'consultor_id')
   }
