@@ -13,7 +13,7 @@ const Auth = {
   galaxHash: _HASH
 }
 
-/*
+/***
  * Área destinada ao cadastro ou alteração de um
  * cliente e cadastro de um Contrato/Venda para realizar
  * a cobrança em um cartão de crédito ou débito.
