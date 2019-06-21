@@ -75,6 +75,12 @@ Route.put('passwords', 'ForgotPasswordController.update').validator(
   'ResetPassword'
 )
 
+Route.get('ping', () => {
+  return {
+    message: 'pong'
+  }
+})
+
 Route.get('oi', () => {
   return {
     message: 'oi'
