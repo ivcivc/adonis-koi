@@ -27,8 +27,8 @@ class ParticipanteController {
     }
 
     console.log('participante - index 2')
-    /* query.with('pessoa')
-
+    query.with('pessoa')
+    /*
     query.with('consultor') */
     // query.with('evento')
 
