@@ -27,9 +27,10 @@ class ParticipanteController {
     }
 
     console.log('participante - index 2')
-    query.with('pessoa')
-    /* query.with('evento')
+    /* query.with('pessoa')
+
     query.with('consultor') */
+    query.with('evento')
 
     console.log('participante - index 3')
     const reg = await query.fetch()
