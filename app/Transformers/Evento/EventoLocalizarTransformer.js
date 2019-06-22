@@ -9,9 +9,10 @@ const BumblebeeTransformer = use('Bumblebee/Transformer')
  * @constructor
  */
 class EventoLocalizarTransformer extends BumblebeeTransformer {
-  static get defaultInclude () {
+  /* static get defaultInclude () {
     return ['local', 'treinamento', 'participantes']
-  }
+  } */
+
   /**
    * This method is used to transform the data.
    */
@@ -25,7 +26,7 @@ class EventoLocalizarTransformer extends BumblebeeTransformer {
     }
   }
 
-  includeLocal (o) {
+  /* includeLocal (o) {
     const LocalTransformer = use('App/Transformers/Evento/LocalTransformer')
     return this.item(o.getRelated('local'), LocalTransformer)
   }
@@ -40,7 +41,7 @@ class EventoLocalizarTransformer extends BumblebeeTransformer {
   includeParticipantes (o) {
     const transformer = use('App/Transformers/Evento/ParticipanteTransformer')
     return this.collection(o.getRelated('participantes'), transformer)
-  }
+  } */
 }
 
 module.exports = EventoLocalizarTransformer
