@@ -30,7 +30,7 @@ class ParticipanteController {
     /* query.with('pessoa')
 
     query.with('consultor') */
-    query.with('evento')
+    //query.with('evento')
 
     try {
      console.log('participante - index 3')
