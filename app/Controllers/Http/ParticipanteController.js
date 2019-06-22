@@ -39,6 +39,7 @@ class ParticipanteController {
       return reg
     } catch (error) {
       console.log('participante - index error')
+      console.log(error)
       return response.status(401).send(error.message)
     }
 
