@@ -31,10 +31,7 @@ class ParticipanteController {
     query.with('consultor')
 
     const reg = await query.fetch()
-    reg.rows.forEach(r => {
-      const i = r
-      console.log(i)
-    })
+
     // eslint-disable-next-line no-return-await
     return reg
 
