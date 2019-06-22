@@ -12,15 +12,25 @@ const EventoLocalizarTransformer = use(
 class EventoController {
   async index ({ request, transform }) {
     const status = request.input('status')
+    const nome = request.input('nome')
     const isLocalizar = request.input('isLocalizar')
     const sortSelector = request.input('sortSelector')
     const sortDirection = request.input('sortDirection')
-    console.log('index.......')
+    const page =
+      request.input('page') === 'undefined' ? null : request.input('page')
+    const limit =
+      request.input('limit') === 'undefined' ? null : request.input('limit')
+
     const query = Evento.query()
 
     if (status) {
       query.where('status', 'LIKE', status)
-      query.orderByRaw('participantes, nome')
+      // query.orderByRaw('participantes, nome')
+    }
+
+    if (nome) {
+      query.where('nome', 'LIKE', nome)
+      // query.orderByRaw('participantes, nome')
     }
 
     query.with('local')
@@ -33,12 +43,19 @@ class EventoController {
       query.orderBy('nome', 'ASC')
     }
 
-    const dados = await query.paginate()
+    let dados = null
+
+    if (page && limit) {
+      dados = await query.paginate(page, limit)
+    } else {
+      dados = await query.paginate()
+    }
 
     if (isLocalizar) {
-      console.log('................')
+      console.log(' localizar ... ')
       return transform.paginate(dados, EventoLocalizarTransformer)
     } else {
+      console.log(' NÃO localizar ... ')
       return dados
     }
   }
