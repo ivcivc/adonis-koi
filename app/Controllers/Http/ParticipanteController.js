@@ -10,6 +10,8 @@ class ParticipanteController {
     // eslint-disable-next-line camelcase
     const evento_id = request.input('evento_id')
 
+    console.log('participante - index')
+
     const query = Participante.query() // .with('local')
 
     // eslint-disable-next-line camelcase
@@ -58,6 +60,7 @@ class ParticipanteController {
 
   async show ({ params, response }) {
     try {
+      console.log('participante - show')
       const participante = Participante.query()
       participante.where('id', '=', params.id)
       participante.with('pessoa')
