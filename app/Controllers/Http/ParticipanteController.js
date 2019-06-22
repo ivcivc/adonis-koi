@@ -30,26 +30,19 @@ class ParticipanteController {
     /* query.with('pessoa')
 
     query.with('consultor') */
-    //query.with('evento')
+    // query.with('evento')
 
     try {
-     console.log('participante - index 3')
+      console.log('participante - index 3')
       const reg = await query.fetch()
       console.log('participante - index 4')
       return reg
     } catch (error) {
       console.log('participante - index error')
-      return response
-        .status(401)
-        .send(error.message)
+      return response.status(401).send(error.message)
     }
-
-    }
-
-
 
     // eslint-disable-next-line no-return-await
-
 
     // const dados = await query.paginate()
 
