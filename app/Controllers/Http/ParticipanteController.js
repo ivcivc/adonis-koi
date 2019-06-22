@@ -1,12 +1,12 @@
 'use strict'
 
 const Participante = use('App/Models/Participante')
-const ParticipanteTransformer = use(
+/* const ParticipanteTransformer = use(
   'App/Transformers/Evento/ParticipanteTransformer'
-)
+) */
 
 class ParticipanteController {
-  async index ({ request, response, transform }) {
+  async index ({ request, response }) {
     // eslint-disable-next-line camelcase
     const evento_id = request.input('evento_id')
 
@@ -56,7 +56,7 @@ class ParticipanteController {
     }
   }
 
-  async show ({ params, response, transform }) {
+  async show ({ params, response }) {
     try {
       const participante = Participante.query()
       participante.where('id', '=', params.id)
