@@ -20,18 +20,20 @@ class ParticipanteController {
         .status(400)
         .send('Não foi possível localizar o participante solicitado.')
     }
-
+    console.log('participante - index 1 ')
     // eslint-disable-next-line camelcase
     if (evento_id) {
       query.where('evento_id', 'LIKE', evento_id)
     }
 
+    console.log('participante - index 2')
     query.with('pessoa')
     query.with('evento')
     query.with('consultor')
 
+    console.log('participante - index 3')
     const reg = await query.fetch()
-
+    console.log('participante - index 4')
     // eslint-disable-next-line no-return-await
     return reg
 
