@@ -8,7 +8,7 @@ class Participante extends Model {
     return this.belongsTo('App/models/Pessoa', 'pessoa_id')
   }
   evento () {
-    return this.belongsToMany('App/models/Evento')
+    return this.belongsTo('App/models/Evento')
   }
   /*
   participante () {
