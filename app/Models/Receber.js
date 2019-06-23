@@ -5,17 +5,17 @@ const Model = use('Model')
 
 class Receber extends Model {
   pessoa () {
-    return this.belongsTo('App/models/Pessoa', 'pessoa_id')
+    return this.belongsTo('App/Models/Pessoa', 'pessoa_id')
   }
   /* evento () {
     return this.belongsTo('App/models/Evento', 'evento_id')
   } */
   participante () {
-    return this.belongsTo('App/models/Participante', 'participante_id')
+    return this.belongsTo('App/Models/Participante', 'participante_id')
   }
 
   contaReceber () {
-    return this.belongsTo('App/models/ContaReceber', 'contaReceber_id')
+    return this.belongsTo('App/Models/ContaReceber', 'contaReceber_id')
   }
 
   receberItems () {

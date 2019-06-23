@@ -1,7 +1,7 @@
 'use strict'
 
 const Participante = use('App/Models/Participante')
-const Pessoa = use('App/Models/Pessoa')
+// const Pessoa = use('App/Models/Pessoa')
 /* const ParticipanteTransformer = use(
   'App/Transformers/Evento/ParticipanteTransformer'
 ) */
@@ -45,7 +45,7 @@ class ParticipanteController {
     // let pessoa = null
 
     for (let r of reg.rows) {
-      const x = await r.pessoa().fetch()
+      let x = await r.pessoa().fetch()
       r.pessoa = x
       // let pessoa = await Pessoa.find(e.pessoa_id).fetch()
       // pessoa = e.pessoa()

@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class ReceberItem extends Model {
   receber () {
-    return this.belongsTo('App/models/Receber')
+    return this.belongsTo('App/Models/Receber')
   }
 }
 

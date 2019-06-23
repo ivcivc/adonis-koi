@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class PessoaGrupo extends Model {
   pessoa () {
-    return this.belongsTo('App/models/Pessoa')
+    return this.belongsTo('App/Models/Pessoa')
   }
 }
 
