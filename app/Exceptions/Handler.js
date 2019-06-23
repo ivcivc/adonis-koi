@@ -24,6 +24,7 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async handle (error, { request, response }) {
+    console.log(error.message)
     console.log('EXCESSÃO DISPARADA: ', error.name)
     if (error.name === 'ValidationException') {
       return response.status(error.status).send({

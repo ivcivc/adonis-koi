@@ -42,14 +42,16 @@ class ParticipanteController {
     const reg = await query.fetch()
 
     let arr = []
-    let pessoa = null
+    // let pessoa = null
 
-    reg.rows.forEach(e => {
-      // let pessoa = await Pessoa.find(e.pessoa_id)
+    for (let r of reg.rows) {
+      const x = await r.pessoa().fetch()
+      r.pessoa = x
+      // let pessoa = await Pessoa.find(e.pessoa_id).fetch()
       // pessoa = e.pessoa()
-      // arr.push(pessoa)
+      arr.push(x)
       // e.participante = pessoa
-    })
+    }
 
     console.log(arr)
 
