@@ -1,6 +1,7 @@
 'use strict'
 
 const Participante = use('App/Models/Participante')
+const Pessoa = use('App/Models/Pessoa')
 /* const ParticipanteTransformer = use(
   'App/Transformers/Evento/ParticipanteTransformer'
 ) */
@@ -28,20 +29,35 @@ class ParticipanteController {
 
     console.log('participante - index 2')
     query.with('pessoa')
+    query.with('consultor')
+    query.with('evento')
     /*
     query.with('consultor') */
     // query.with('evento')
 
-    try {
-      console.log('participante - index 3')
-      const reg = await query.fetch()
-      console.log('participante - index 4')
-      return reg
-    } catch (error) {
+    // try {
+    console.log('participante - index 3')
+    const reg = await query.fetch()
+
+    let arr = []
+    let pessoa = null
+
+    reg.rows.forEach(e => {
+      // let pessoa = await Pessoa.find(e.pessoa_id)
+      // pessoa = e.pessoa()
+      // arr.push(pessoa)
+      // e.participante = pessoa
+    })
+
+    console.log(arr)
+
+    console.log('participante - index 4')
+    return reg
+    /* } catch (error) {
       console.log('participante - index error')
       console.log(error)
       return response.status(401).send(error.message)
-    }
+    } */
 
     // eslint-disable-next-line no-return-await
 
