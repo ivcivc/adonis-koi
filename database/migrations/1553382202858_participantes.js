@@ -13,7 +13,7 @@ class ParticipantesSchema extends Schema {
         .unsigned()
         .notNullable()
         .references('id')
-        .on('eventos')
+        .inTable('eventos')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
 
@@ -22,7 +22,7 @@ class ParticipantesSchema extends Schema {
         .unsigned()
         .notNullable()
         .references('id')
-        .on('pessoas')
+        .inTable('pessoas')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT')
 
@@ -31,7 +31,7 @@ class ParticipantesSchema extends Schema {
         .unsigned()
         .default(null)
         .references('id')
-        .on('pessoas')
+        .inTable('pessoas')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT')
 
