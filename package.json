@@ -40,8 +40,7 @@
     "to": "^0.2.9",
     "update": "^0.7.4",
     "validar-cpf": "^2.0.4",
-    "xml-js": "^1.6.11",
-    "youch": "^2.0.10"
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "eslint": "^5.12.1",
