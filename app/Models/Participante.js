@@ -5,18 +5,18 @@ const Model = use('Model')
 
 class Participante extends Model {
   pessoa () {
-    return this.belongsTo('App/models/Pessoa', 'pessoa_id', 'id')
+    return this.belongsTo('App/Models/Pessoa', 'pessoa_id', 'id')
   }
   evento () {
-    return this.belongsTo('App/models/Evento', 'evento_id', 'id')
+    return this.belongsTo('App/Models/Evento', 'evento_id', 'id')
   }
   /*
   participante () {
-    return this.belongsTo('App/models/Participante')
+    return this.belongsTo('App/Models/Participante')
   }
 
   consultor () {
-    return this.belongsTo('App/models/Pessoa', 'consultor_id')
+    return this.belongsTo('App/Models/Pessoa', 'consultor_id')
   } */
 }
 

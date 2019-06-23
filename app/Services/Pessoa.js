@@ -1,7 +1,7 @@
 'use strict'
 
 const Model = use('App/Models/Pessoa')
-const Database = use('Database')
+// const Database = use('Database')
 
 class Pessoa {
   async add (data, trx) {

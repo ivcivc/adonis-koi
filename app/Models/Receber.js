@@ -8,7 +8,7 @@ class Receber extends Model {
     return this.belongsTo('App/Models/Pessoa', 'pessoa_id')
   }
   /* evento () {
-    return this.belongsTo('App/models/Evento', 'evento_id')
+    return this.belongsTo('App/Models/Evento', 'evento_id')
   } */
   participante () {
     return this.belongsTo('App/Models/Participante', 'participante_id')

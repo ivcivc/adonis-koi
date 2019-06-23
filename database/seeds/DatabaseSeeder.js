@@ -6,7 +6,7 @@
 |--------------------------------------------------------------------------
 |
 | Make use of the Factory instance to seed database with dummy data or
-| make use of Lucid models directly.
+| make use of Lucid Models directly.
 |
 */
 
@@ -14,8 +14,7 @@
 const Factory = use('Factory')
 
 class DatabaseSeeder {
-  async run () {
-  }
+  async run () {}
 }
 
 module.exports = DatabaseSeeder
