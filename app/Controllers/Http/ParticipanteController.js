@@ -24,10 +24,10 @@ class ParticipanteController {
     console.log('participante - index 1 ')
     // eslint-disable-next-line camelcase
     if (evento_id) {
-      query.where('evento_id', 'LIKE', evento_id)
+      query.where('evento_id', 'LIKE', evento_id).with('pessoa')
     }
 
-    query.with('evento')
+    // query.with('evento')
 
     console.log('participante - index 2')
     // query.with('pessoa')
