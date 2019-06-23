@@ -13,7 +13,7 @@ class ParticipantesSchema extends Schema {
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('eventos')
+        .on('eventos')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
 

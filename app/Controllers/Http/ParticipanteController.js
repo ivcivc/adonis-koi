@@ -27,6 +27,8 @@ class ParticipanteController {
       query.where('evento_id', 'LIKE', evento_id)
     }
 
+    // query.with('evento')
+
     console.log('participante - index 2')
     // query.with('pessoa')
     // query.with('consultor')
