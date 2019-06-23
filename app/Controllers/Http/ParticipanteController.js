@@ -13,7 +13,7 @@ class ParticipanteController {
 
     console.log('participante - index')
 
-    const query = Participante.query().with('pessoa')
+    const query = Participante.query()
 
     // eslint-disable-next-line camelcase
     if (!evento_id) {
