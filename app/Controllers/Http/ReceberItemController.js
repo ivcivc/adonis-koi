@@ -51,6 +51,15 @@ class ReceberItemController {
       const status = request.input('status')
       const sortSelector = request.input('sortSelector')
       const sortDirection = request.input('sortDirection')
+      const nome = request.input('nome')
+      const isLocalizar = !!request.input('isLocalizar')
+
+      payload.isLocalizar = isLocalizar
+      console.log('l o c a l i z a n d o')
+
+      if (nome) {
+        payload.nome = nome
+      }
       if (status) {
         payload.status = status
       }

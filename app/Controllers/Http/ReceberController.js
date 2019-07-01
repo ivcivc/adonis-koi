@@ -37,8 +37,10 @@ class ReceberController {
   }
 
   async show ({ params, response }) {
+    console.log('show')
     try {
-      const res = await new ServiceReceber().get(params.id)
+      const res = await new ServiceReceber().get(params.id) //.with('receberItems')
+      await res.load('receberItems')
       return res
     } catch (error) {
       return response.status(400).send({ message: 'Registro não localizado.' })
@@ -46,6 +48,7 @@ class ReceberController {
   }
 
   async index ({ request, response }) {
+    console.log('index')
     try {
       let payload = {}
       const status = request.input('status')

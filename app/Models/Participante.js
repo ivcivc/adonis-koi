@@ -10,14 +10,14 @@ class Participante extends Model {
   evento () {
     return this.belongsTo('App/Models/Evento', 'evento_id', 'id')
   }
-  /*
-  participante () {
+
+  /* participante () {
     return this.belongsTo('App/Models/Participante')
-  }
+  } */
 
   consultor () {
     return this.belongsTo('App/Models/Pessoa', 'consultor_id')
-  } */
+  }
 }
 
 module.exports = Participante

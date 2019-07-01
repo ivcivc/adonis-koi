@@ -7,12 +7,15 @@ class ReceberItemSchema extends Schema {
   up () {
     this.create('receber_items', table => {
       table.increments()
-      table.date('payDay').notNullable()
+      table
+        .date('payDay')
+        .notNullable()
+        .index()
       table.integer('installmentNumber').notNullable()
       table.string('tid', 30)
       table.string('additionalInfo').default(null)
-      table.string('paymentBillInternalId')
-      table.string('paymentBillIntegrationId')
+      table.string('paymentBillInternalId', 15)
+      table.string('paymentBillIntegrationId', 15)
       table.string('paymentBillAdditionalInfo')
       table.float('value').default(0.0)
       table.string('authorizationCode')

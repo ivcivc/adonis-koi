@@ -66,6 +66,8 @@ class ReceberItem {
       const sortSelector = payload.sortSelector
       const sortDirection = payload.sortDirection
       const status = payload.status
+      const nome = payload.nome
+      const isLocalizar = payload.isLocalizar
 
       const query = Model.query()
 
@@ -74,15 +76,45 @@ class ReceberItem {
         // query.orderByRaw('pessoa,nome', 'desc')
       }
 
+      console.log('nome: ', nome)
+
+      if (nome) {
+        console.log('nome ', nome)
+        query.whereHas('receber', receberQuery => {
+          receberQuery.whereHas('pessoa', pessoaQuery =>
+            pessoaQuery.where('nome', 'LIKE', '%' + nome + '%')
+          )
+        })
+
+        let b = 1
+
+        // query.whereHas('receber.brand', 'LIKE', nome)
+        // query.orderByRaw('pessoa,nome', 'desc')
+      }
+
       query.with('receber')
+      query.with('receber.pessoa')
 
       if (sortSelector) {
-        query.orderBy(sortSelector, sortDirection)
+        if (sortSelector.includes('nome')) {
+          console.log(1, ' ', sortSelector)
+          // query.orderByRaw('receber,brand', sortDirection)
+        } else {
+          console.log(2)
+          query.orderBy(sortSelector, sortDirection)
+        }
       } else {
         // query.orderByRaw('pessoa,nome')
       }
 
       const dados = await query.paginate()
+      dados.rows.forEach(o => {
+        let r = o.$relations.receber.$relations.pessoa
+        o.aluno = r.nome
+      })
+
+      if (isLocalizar) {
+      }
       return dados
     } catch (error) {
       throw { message: error.message }

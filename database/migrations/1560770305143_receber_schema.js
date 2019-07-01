@@ -22,6 +22,7 @@ class ReceberSchema extends Schema {
       table.string('brand', 15)
       table.string('operator', 10)
       table.string('operatorName', 20)
+      table.string('meioPgto', 20)
 
       table
         .integer('participante_id')
@@ -48,6 +49,10 @@ class ReceberSchema extends Schema {
         .inTable('conta_recebers')
         .onUpdate('CASCADE')
         .onDelete('RESTRICT')
+
+      table.boolean('transmitido').default(false)
+      table.string('transactionId', 15).index()
+      table.string('transactionInternalId', 15).index()
 
       table.timestamps()
     })

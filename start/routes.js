@@ -175,3 +175,5 @@ Route.resource('/receber', 'ReceberController').apiOnly()
 Route.resource('/receberItems', 'ReceberItemController').apiOnly()
 
 Route.resource('/contaReceber', 'ContaReceberController').apiOnly()
+
+Route.get('/getStatusTransaction', 'StatusTransactionController.getStatus')

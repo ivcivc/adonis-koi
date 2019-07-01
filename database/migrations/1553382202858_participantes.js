@@ -30,10 +30,10 @@ class ParticipanteSchema extends Schema {
         .integer('consultor_id')
         .unsigned()
         .default(null)
-      /* .references('id')
+        .references('id')
         .inTable('pessoas')
         .onUpdate('CASCADE')
-        .onDelete('RESTRICT') */
+        .onDelete('RESTRICT')
 
       table
         .boolean('treinamentoConcluido')

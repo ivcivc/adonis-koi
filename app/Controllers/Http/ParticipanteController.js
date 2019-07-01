@@ -11,8 +11,6 @@ class ParticipanteController {
     // eslint-disable-next-line camelcase
     const evento_id = request.input('evento_id')
 
-    console.log('participante - index')
-
     const query = Participante.query()
 
     // eslint-disable-next-line camelcase
@@ -21,41 +19,32 @@ class ParticipanteController {
         .status(400)
         .send('Não foi possível localizar o participante solicitado.')
     }
-    console.log('participante - index 1 ')
     // eslint-disable-next-line camelcase
     if (evento_id) {
       query.where('evento_id', 'LIKE', evento_id)
     }
 
-    // query.with('evento')
-
-    console.log('participante - index 2')
-    // query.with('pessoa')
-    // query.with('consultor')
+    query.with('pessoa')
+    query.with('consultor')
     query.with('evento')
-    /*
-    query.with('consultor') */
-    // query.with('evento')
 
     // try {
-    console.log('participante - index 3')
     const reg = await query.fetch()
 
-    let arr = []
+    // let arr = []
     // let pessoa = null
 
-    for (let r of reg.rows) {
-      let x = await r.pessoa().fetch()
-      r.pessoa = x
-      // let pessoa = await Pessoa.find(e.pessoa_id).fetch()
-      // pessoa = e.pessoa()
-      arr.push(x)
-      // e.participante = pessoa
-    }
+    // for (let r of reg.rows) {
+    //  let x = await r.pessoa().fetch()
+    //  r.pessoa = x
+    // let pessoa = await Pessoa.find(e.pessoa_id).fetch()
+    // pessoa = e.pessoa()
+    //  arr.push(x)
+    // e.participante = pessoa
+    // }
 
-    console.log(arr)
+    // console.log(arr)
 
-    console.log('participante - index 4')
     return reg
     /* } catch (error) {
       console.log('participante - index error')
