@@ -2,6 +2,17 @@
 
 const status = [
   {
+    name: 'payExternal',
+    displayName: 'Paga fora do sistema',
+    status: 'galaxpay'
+  },
+  {
+    name: 'cancel',
+    displayName: 'Cancelada manualmente',
+    status: 'galaxpay'
+  },
+
+  {
     name: 'captured',
     displayName: 'Capturada na Operadora',
     status: 'galaxpay'

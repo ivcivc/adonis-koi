@@ -1,18 +1,38 @@
 'use strict'
 
 // const Receber = use('App/Models/Receber')
+const Database = use('Database')
 
 const ServiceReceber = use('App/Services/Receber')
+const ServicePessoa = use('App/Services/Pessoa')
 
 class ReceberController {
   async store ({ request, response }) {
+    const trx = await Database.beginTransaction()
     try {
       const payload = request.all()
+      const items = payload.receberItems
+      delete payload.receberItems
 
-      const res = await new ServiceReceber().add(payload)
+      const receber = await new ServiceReceber().add(payload, trx)
+      if (receber.meioPgto === 'koi') {
+        console.log('koi')
+        items.forEach((e, index) => {
+          // const receberItems = await receber.receberItems().create(items[index], trx)
+        })
+      }
 
+      if (receber.meioPgto === 'galaxpay') {
+        console.log('galaxpay.')
+        // const receberItems = await receber.receberItems().create(items[0], trx)
+      }
+
+      const receberItems = await receber.receberItems().attach(items, null, trx)
+
+      await trx.rollback()
       return res
     } catch (error) {
+      await trx.rollback()
       return response.status(400).send(error)
     }
   }
@@ -39,7 +59,7 @@ class ReceberController {
   async show ({ params, response }) {
     console.log('show')
     try {
-      const res = await new ServiceReceber().get(params.id) //.with('receberItems')
+      const res = await new ServiceReceber().get(params.id) // .with('receberItems')
       await res.load('receberItems')
       return res
     } catch (error) {

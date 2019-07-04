@@ -1,17 +1,27 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-throw-literal */
 'use strict'
 
 const Model = use('App/Models/Receber')
-// const Database = use('Database')
 
 class Receber {
   async add (payload, trx) {
     try {
+      const { meioPgto, pessoa_id } = payload
+
+      if (!meioPgto) {
+        throw { message: 'Meio de pagamento não informado.' }
+      }
+
+      if (!pessoa_id) {
+        throw { message: 'Aluno não informado.' }
+      }
+
       const receber = await Model.create(payload, trx)
-      await receber.load('pessoa')
+      const pessoa = await receber.load('pessoa')
       // await receber.load('evento')
       // await receber.load('participacao')
-      await receber.load('receberItems')
+      // await receber.load('receberItems')
 
       return receber
     } catch (error) {
@@ -93,3 +103,16 @@ class Receber {
 }
 
 module.exports = Receber
+
+/*
+
+      const findPessoa = await new ServicePessoa().get(pessoa_id)
+      if (findPessoa) {
+      } else {
+        throw 'Aluno não encontrado'
+      }
+        const grupoAluno = await new ServiceGrupo().getIdGrupoAluno()
+        gruposPessoa = await findPessoa.grupos().fetch()
+        if (!gruposPessoa.rows.includes(grupoAluno)) {
+          await findPessoa.grupos().attach([grupoAluno], null, trx)
+        } */

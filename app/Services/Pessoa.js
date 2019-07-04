@@ -32,6 +32,16 @@ class Pessoa {
       throw e
     }
   }
+
+  async get (ID) {
+    try {
+      const pessoa = await Model.find(ID)
+
+      return pessoa
+    } catch (e) {
+      throw e
+    }
+  }
 }
 
 module.exports = Pessoa
