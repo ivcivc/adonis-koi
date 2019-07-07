@@ -17,6 +17,8 @@ class ReceberItemSchema extends Schema {
       table.string('paymentBillInternalId', 15)
       table.string('paymentBillIntegrationId', 15)
       table.string('paymentBillAdditionalInfo')
+      table.float('liquido').default(0.0)
+      table.float('desconto').default(0.0)
       table.float('value').default(0.0)
       table.string('authorizationCode')
       table.date('lastUpdateDate')

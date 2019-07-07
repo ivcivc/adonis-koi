@@ -31,6 +31,16 @@ Route.get(
   'meioPagamentoController/galaxPay/GalaxPay.getCliente'
 )
 
+Route.get(
+  '/galaxPay/getPessoaCartoes/:ID',
+  'meioPagamentoController/galaxPay/GalaxPay.getPessoaCartoes'
+)
+
+Route.get(
+  '/galaxPay/getBandeiras',
+  'meioPagamentoController/galaxPay/GalaxPay.getBandeiras'
+)
+
 // PagarMe
 Route.post('/pagarMe/addPlano', 'pagarMeController/PagarMe.addPlano')
 

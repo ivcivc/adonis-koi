@@ -20,6 +20,8 @@ class ReceberSchema extends Schema {
       table.float('desconto').default(0.0)
       table.float('value').default(0.0)
       table.string('brand', 15)
+      table.string('truncatedNumber', 20)
+      table.string('cardInternalId', 20)
       table.string('operator', 10)
       table.string('operatorName', 20)
       table.string('meioPgto', 20)

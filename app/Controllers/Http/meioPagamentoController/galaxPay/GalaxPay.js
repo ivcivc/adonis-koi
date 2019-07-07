@@ -1,6 +1,7 @@
 'use strict'
 
 const axios = require('axios')
+const Service = require('../../../../Services/GalaxPay')
 
 const Env = use('Env')
 
@@ -28,6 +29,17 @@ class GalaxPayController {
       .catch(e => {
         return response.status(404).send(e.response.data)
       })
+  }
+
+  async getPessoaCartoes ({ params, response }) {
+    const ID = params.ID
+    const cartoes = await new Service().getPessoaCartoes(ID)
+    return cartoes
+  }
+
+  async getBandeiras () {
+    const bandeiras = await new Service().getBandeiras()
+    return bandeiras
   }
 }
 

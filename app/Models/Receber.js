@@ -20,6 +20,7 @@ class Receber extends Model {
 
   receberItems () {
     return this.hasMany('App/Models/ReceberItem')
+    // return this.belongsToMany('App/Models/ReceberItem')
   }
 }
 

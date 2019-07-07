@@ -37,6 +37,49 @@ class GalaxPay {
       })
     return retorno
   }
+
+  async getPessoaCartoes (ID) {
+    const url = `${_URL}/getCardsByCustomer`
+    const data = {
+      method: 'get',
+      responseType: 'json',
+      url,
+      data: {
+        Auth,
+        Request: {
+          customerIntegrationId: `${ID}`
+        }
+      }
+    }
+    const retorno = await axios(data)
+      .then(res => {
+        return res.data
+      })
+      .catch(e => {
+        return e.data
+      })
+    return retorno
+  }
+
+  async getBandeiras () {
+    const url = `${_URL}/getAllBrandsEnabled`
+    const data = {
+      method: 'get',
+      responseType: 'json',
+      url,
+      data: {
+        Auth
+      }
+    }
+    const retorno = await axios(data)
+      .then(res => {
+        return res.data
+      })
+      .catch(e => {
+        return e.data
+      })
+    return retorno
+  }
 }
 
 module.exports = GalaxPay
