@@ -10,57 +10,58 @@ class ReceberController {
   async store ({ request, response }) {
     const trx = await Database.beginTransaction()
     try {
-      const { payload, card } = request.all()
-      const items = payload.receberItems
-      delete payload.receberItems
-      let isNewcard = payload.cardInternalId === '_new'
+      const { receber, card } = request.all()
+      const items = receber.receberItems
+      delete receber.receberItems
+      let isNewcard = receber.cardInternalId === '_new'
       let cardEnviar = null
 
-      if (isNewcard) {
+      if (!isNewcard) {
         if (!card) {
           // eslint-disable-next-line no-throw-literal
           throw 'Cartão de crédito não informado.'
         }
         cardEnviar = {
-          integrationId: 'CARD-6+',
-          number: '4716 0248 9944 1650',
-          holder: 'Cliente de exemplo Galax Pay',
-          expiryMonth: '04',
-          expiryYear: '2023',
-          cvv: '541',
-          brand: 'visa'
+          number: card.number,
+          holder: card.holder,
+          expiryMonth: card.expiryMonth,
+          expiryYear: card.expiryYear,
+          cvv: card.cvv,
+          brand: card.brand
         }
       } else {
         cardEnviar = {
-          integrationId: payload.cardInternalId
+          integrationId: receber.cardInternalId
         }
       }
 
       let integrationIds = {}
 
-      const receber = await new ServiceReceber().add(payload, trx)
+      const receberModel = await new ServiceReceber().add(receber, trx)
 
       for (let index in items) {
-        const receberItems = await receber
+        const receberModelItems = await receberModel
           .receberItems()
           .create(items[index], trx)
 
         integrationIds[`${parseInt(index) + 1}`] = {
-          integrationId: `${receberItems.id}`
+          integrationId: `${receberModelItems.id}`
         }
       }
 
-      if (receber.meioPgto === 'koi') {
+      if (receberModel.meioPgto === 'koi') {
         console.log('koi')
       }
 
-      if (receber.meioPgto === 'galaxpay') {
+      if (receberModel.meioPgto === 'galaxpay') {
         console.log('galaxpay.')
 
         // const receberItems = await receber.receberItems().create(items[0], trx)
       }
 
-      const receberItems = await receber.receberItems().createMany(items, trx)
+      const receberItems = await receberModel
+        .receberItems()
+        .createMany(items, trx)
       // const ri = receberItems.fetch()
       receberItems.forEach(e => console.log(e.id))
 
