@@ -1,6 +1,6 @@
 'use strict'
 
-// const Receber = use('App/Models/Receber')........ pc
+// const Receber = use('App/Models/Receber')........ pc- linux
 const Database = use('Database')
 
 const ServiceReceber = use('App/Services/Receber')
