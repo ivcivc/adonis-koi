@@ -1,6 +1,6 @@
 'use strict'
 
-// const Receber = use('App/Models/Receber')........ me DELL 05
+// const Receber = use('App/Models/Receber')
 const Database = use('Database')
 
 const ServiceReceber = use('App/Services/Receber')
@@ -22,12 +22,12 @@ class ReceberController {
           throw 'Cartão de crédito não informado.'
         }
         cardEnviar = {
-          number: card.number,
-          holder: card.holder,
-          expiryMonth: card.expiryMonth,
-          expiryYear: card.expiryYear,
-          cvv: card.cvv,
-          brand: card.brand
+          number: card.cardNumber,
+          holder: card.cardName,
+          expiryMonth: card.cardValidate.substr(0, 2),
+          expiryYear: card.cardValidate.substr(3, 4),
+          cvv: card.cardCode,
+          brand: card.internalName
         }
       } else {
         cardEnviar = {
