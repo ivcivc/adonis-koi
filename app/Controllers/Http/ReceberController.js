@@ -1,10 +1,19 @@
+/* eslint-disable no-extend-native */
 'use strict'
 
 // const Receber = use('App/Models/Receber')
 const Database = use('Database')
 
 const ServiceReceber = use('App/Services/Receber')
-const ServicePessoa = use('App/Services/Pessoa')
+const Pessoa = use('App/Models/Pessoa')
+
+const ServiceGalaxyPay = use('App/Services/GalaxPay')
+
+Number.prototype.toFixedDown = function (digits) {
+  var n = this - Math.pow(10, -digits) / 2
+  n += n / Math.pow(2, 53)
+  return n.toFixed(digits)
+}
 
 class ReceberController {
   async store ({ request, response }) {
@@ -14,9 +23,14 @@ class ReceberController {
       const items = receber.receberItems
       delete receber.receberItems
       let isNewcard = receber.cardInternalId === '_new'
+      if (receber.cardInternalId === undefined) {
+        isNewcard = true
+      }
+      delete receber['cardInternalId']
+
       let cardEnviar = null
 
-      if (!isNewcard) {
+      if (isNewcard) {
         if (!card) {
           // eslint-disable-next-line no-throw-literal
           throw 'Cartão de crédito não informado.'
@@ -27,7 +41,7 @@ class ReceberController {
           expiryMonth: card.cardValidate.substr(0, 2),
           expiryYear: card.cardValidate.substr(3, 4),
           cvv: card.cardCode,
-          brand: card.internalName
+          brand: card.brand
         }
       } else {
         cardEnviar = {
@@ -35,19 +49,91 @@ class ReceberController {
         }
       }
 
+      const valorParcela = receber.valorParcela
+      const parcelas = receber.quantity
+      const valor = receber.value
+
+      if (valorParcela * parcelas <= valor) {
+        throw 'Valor da parcela inválido.'
+      }
+      let discounts = null
+
+      if (parseFloat(parcelas * valorParcela).toFixedDown(2) > valor) {
+        const desconto = parseFloat(
+          (parcelas * valorParcela - valor).toFixed(2)
+        ).toFixedDown(2)
+        discounts = {}
+        discounts[`${parcelas}`] = {
+          valueDiscount: `${desconto}`,
+          info: 'Ajuste de valor'
+        }
+      }
+
       let integrationIds = {}
 
       const receberModel = await new ServiceReceber().add(receber, trx)
 
-      for (let index in items) {
-        const receberModelItems = await receberModel
-          .receberItems()
-          .create(items[index], trx)
+      if (receberModel.meioPgto === 'koi') {
+        for (let index in items) {
+          const receberModelItems = await receberModel
+            .receberItems()
+            .create(items[index], trx)
 
-        integrationIds[`${parseInt(index) + 1}`] = {
-          integrationId: `${receberModelItems.id}`
+          integrationIds[`${parseInt(index) + 1}`] = {
+            integrationId: `${receberModelItems.id}`
+          }
         }
       }
+
+      if (receberModel.meioPgto === 'galaxpay') {
+        for (let index = 0; index < parcelas; index++) {
+          let item = {
+            payDay: receber.dateFirst,
+            installmentNumber: parcelas,
+            liquido: valorParcela,
+            value: valorParcela,
+            status: 'auto'
+          }
+          const receberModelItems = await receberModel
+            .receberItems()
+            .create(item, trx)
+
+          integrationIds[`${parseInt(index) + 1}`] = {
+            integrationId: `${receberModelItems.id}`
+          }
+        }
+        // rceberItems = await receber.receberItems().create(items[0], trx)
+      }
+
+      const pessoa = await Pessoa.findOrFail(receber.pessoa_id)
+
+      const sendPay = {
+        integrationId: `@@${receberModel.id}`,
+        typeBill: 'contract',
+        payday: receber.dateFirst,
+        value: receber.valorParcela,
+        quantity: `${receber.quantity}`,
+        periodicity: 'monthly',
+        paymentType: isNewcard ? 'newCard' : 'existingCard',
+        integrationIds: integrationIds,
+        Customer: {
+          integrationId: `##${pessoa.id}`,
+          document: pessoa.cpf,
+          name: pessoa.nome,
+          email: pessoa.email
+        },
+        Card: card
+      }
+
+      if (discounts) {
+        sendPay.discounts = discounts
+      }
+
+      console.log(sendPay)
+
+      const pay = await new ServiceGalaxyPay().createPaymentBillAndCustomer(
+        sendPay
+      )
 
       if (receberModel.meioPgto === 'koi') {
         console.log('koi')
