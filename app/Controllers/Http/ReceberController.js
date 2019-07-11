@@ -145,12 +145,12 @@ class ReceberController {
         // const receberItems = await receber.receberItems().create(items[0], trx)
       }
 
-      const receberItems = await receberModel
+      /*const receberItems = await receberModel
         .receberItems()
         .createMany(items, trx)
       // const ri = receberItems.fetch()
       receberItems.forEach(e => console.log(e.id))
-
+*/
       await trx.rollback()
       // return res
     } catch (error) {
