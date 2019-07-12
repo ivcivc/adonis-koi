@@ -7,16 +7,17 @@ const Model = use('App/Models/Receber')
 class Receber {
   async add (payload, trx) {
     try {
+      console.log(payload)
       const { meioPgto, pessoa_id } = payload
-
+      console.log(1)
       if (!meioPgto) {
         throw { message: 'Meio de pagamento não informado.' }
       }
-
+      console.log(2)
       if (!pessoa_id) {
         throw { message: 'Aluno não informado.' }
       }
-
+      console.log(3)
       const receber = await Model.create(payload, trx)
       const pessoa = await receber.load('pessoa')
       // await receber.load('evento')
@@ -25,6 +26,7 @@ class Receber {
 
       return receber
     } catch (error) {
+      console.log(error.message)
       throw { message: 'Não foi possível adicionar uma canta a receber.' }
     }
   }

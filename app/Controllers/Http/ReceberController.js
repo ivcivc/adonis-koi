@@ -22,6 +22,9 @@ class ReceberController {
       const { receber, card } = request.all()
       const items = receber.receberItems
       delete receber.receberItems
+
+      receber.contaReceber_id= 1  // refazer
+
       let isNewcard = receber.cardInternalId === '_new'
       if (receber.cardInternalId === undefined) {
         isNewcard = true
@@ -151,7 +154,9 @@ class ReceberController {
       // const ri = receberItems.fetch()
       receberItems.forEach(e => console.log(e.id))
 */
-      await trx.rollback()
+      //await trx.rollback()
+      await trx.commit()
+      return response.status(200).send("Transação concluída com sucesso!")
       // return res
     } catch (error) {
       await trx.rollback()
