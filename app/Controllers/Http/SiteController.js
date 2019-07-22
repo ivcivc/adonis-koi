@@ -205,6 +205,7 @@ class SiteController {
   async retorno ({ request }) {
     const r = request.all()
     console.log(r)
+    console.log('data = ', r.data.billInternalId)
 
     return response.status(200).send(r)
   }
