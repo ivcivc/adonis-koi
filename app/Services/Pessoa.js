@@ -42,6 +42,19 @@ class Pessoa {
       throw e
     }
   }
+
+  async getCPF (cpf) {
+    try {
+      const query = Model.query()
+      query.where('cpf', 'like', cpf)
+      query.with('endereco')
+      const pessoa = await query.fetch()
+
+      return pessoa
+    } catch (e) {
+      throw e
+    }
+  }
 }
 
 module.exports = Pessoa

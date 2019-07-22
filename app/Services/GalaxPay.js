@@ -2,6 +2,8 @@
 
 const axios = require('axios')
 
+const ServicePessoa = use('App/Services/Pessoa')
+
 const Env = use('Env')
 
 const _URL = Env.get('GALAXPAY_URL')
@@ -69,6 +71,32 @@ class GalaxPay {
       url,
       data: {
         Auth
+      }
+    }
+    const retorno = await axios(data)
+      .then(res => {
+        return res.data
+      })
+      .catch(e => {
+        return e.data
+      })
+    return retorno
+  }
+
+  async getCPF (cpf) {
+    const res = await new ServicePessoa().getCPF(cpf)
+    return res
+  }
+
+  async getCpfGalaxPay (cpf) {
+    const url = `${_URL}/getCustomerInfo`
+    const data = {
+      method: 'get',
+      responseType: 'json',
+      url,
+      data: {
+        Auth,
+        Request: { customerDocument: cpf }
       }
     }
     const retorno = await axios(data)

@@ -41,6 +41,11 @@ Route.get(
   'meioPagamentoController/galaxPay/GalaxPay.getBandeiras'
 )
 
+Route.post(
+  '/galaxPay/getCPF',
+  'meioPagamentoController/galaxPay/GalaxPay.getCPF'
+)
+
 // PagarMe
 Route.post('/pagarMe/addPlano', 'pagarMeController/PagarMe.addPlano')
 
@@ -175,6 +180,7 @@ Route.resource('/tipoNegociacaos', 'TipoNegociacaoController').apiOnly()
 
 Route.post('/site', 'SiteController.addContrato')
 Route.put('/site', 'SiteController.updateContrato')
+Route.get('/site/getEventosSite', 'SiteController.getEventosSite')
 
 /* Route.post('/receber', 'ReceberController.store')
 Route.put('/receber/:id', 'ReceberController.update')
@@ -187,3 +193,5 @@ Route.resource('/receberItems', 'ReceberItemController').apiOnly()
 Route.resource('/contaReceber', 'ContaReceberController').apiOnly()
 
 Route.get('/getStatusTransaction', 'StatusTransactionController.getStatus')
+
+Route.post('/retorno', 'SiteController.retorno')

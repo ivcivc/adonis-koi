@@ -5,6 +5,8 @@
 const Database = use('Database')
 const Pessoa = use('App/Models/Pessoa')
 
+const Evento = use('App/Models/Evento')
+
 const ServicePessoa = use('App/Services/Pessoa')
 const ServiceEvento = use('App/Services/Evento')
 const ServiceParticipante = use('App/Services/Participante')
@@ -41,7 +43,7 @@ class SiteController {
         }
       }
 
-      const valorParcelaCheck = pagto.parcelas * pagto.valor
+      const valorParcelaCheck = pagto.parcela * pagto.valor
       if (
         valorParcelaCheck > evento.valorBase ||
         valorParcelaCheck > evento.valorBase ||
@@ -74,14 +76,18 @@ class SiteController {
       const participanteData = {
         evento_id,
         pessoa_id,
-        parcelas: card.parcelas,
+        consultor_id: null,
+        pagarConsultor: true,
+        treinamentoConcluido: true,
+        parcelas: pagto.parcela,
         valorBase: evento.valorBase,
         TipoNegociacao_id: 1,
         status: 'ATIVO'
       }
 
       const addParticipante = await new ServiceParticipante().add(
-        participanteData
+        participanteData,
+        trx
       )
       const participante_id = addParticipante.id
 
@@ -93,19 +99,20 @@ class SiteController {
       const receberData = {
         participante_id,
         periodicity: 'monthy',
-        quantity: card.parcelas,
-        liquido: evento.valorBase,
+        quantity: pagto.parcela,
+        liquido: pagto.valorBase,
         desconto: descontoCompra,
+        value: evento.valorBase - descontoCompra,
         dateFirst: moment().format('YYYY-MM-DD'),
         status: 'auto',
         statusDescription: null,
         link: null,
         brand: card.cardBrand,
-        value: evento.valorBase - descontoCompra,
         pessoa_id,
         contaReceber_id: 1,
         operator: null,
-        operatorName: null
+        operatorName: null,
+        meioPgto: 'galaxpay'
       }
 
       const addReceber = await new ServiceReceber().add(receberData, trx)
@@ -128,7 +135,7 @@ class SiteController {
           },
           trx
         )
-        integrationIds[`${i + 1}`] = { integrationId: `${items.id}` }
+        integrationIds[`${parseInt(i) + 1}`] = { integrationId: `${items.id}` }
       }
 
       console.log(integrationIds)
@@ -138,43 +145,39 @@ class SiteController {
       const valorPagar = pagto.valor.toFixed(2)
 
       const sendPay = {
-        integrationId: `${receber_id}##`,
+        integrationId: `##${receber_id}`,
         typeBill: 'contract',
         payday: dataVenc,
         value: valorPagar,
-        quantity: `${pagto.parcelas}`,
+        quantity: `${pagto.parcela}`,
         periodicity: 'monthly',
         paymentType: 'newCard',
         integrationIds: integrationIds,
         Customer: {
-          integrationId: `${pessoa_id}`,
-          document: '43145984926',
-          name: 'CLIENTE KOI 2',
-          email: 'suporte.integracao@galaxpay.com.br',
-          phone: '(31)4020-1512',
-          Address: {
-            zipCode: '30411-325',
-            street: 'Rua platina',
-            number: '1375',
-            neighborhood: 'Prado',
-            city: 'Belo Horizonte',
-            state: 'MG',
-            complement: '2º andar'
-          }
+          integrationId: `#${pessoa_id}`,
+          document: pessoa.cpf,
+          name: pessoa.nome,
+          email: pessoa.email
         },
         Card: {
-          number: '4716 0248 9944 1650',
-          holder: 'Cliente de exemplo Galax Pay',
-          expiryMonth: '04',
-          expiryYear: '2023',
-          cvv: '541',
-          brand: 'visa'
+          number: card.cardNumber,
+          holder: card.cardName,
+          expiryMonth: card.cardValidate.substr(0, 2),
+          expiryYear: card.cardValidate.substr(2, 4),
+          cvv: card.cardCode,
+          brand: card.cardBrand
         }
       }
 
       const pay = await new ServiceGalaxyPay().createPaymentBillAndCustomer(
         sendPay
       )
+
+      if (pay.type === false) {
+        // deletar
+      } else {
+        const paymentBillInternalId = pay.paymentBillInternalId
+      }
 
       return response.status(200).send(pay)
     } catch (e) {
@@ -189,6 +192,21 @@ class SiteController {
 
     return evento.valorBase
     // return new ServiceEvento().update(1, { siteExibir: 'SIM' })
+  }
+
+  async getEventosSite ({ request }) {
+    const query = Evento.query()
+    query.where('siteExibir', 'LIKE', 'SIM')
+    const eventos = await query.fetch()
+
+    return eventos
+  }
+
+  async retorno ({ request }) {
+    const r = request.all()
+    console.log(r)
+
+    return response.status(200).send(r)
   }
 }
 

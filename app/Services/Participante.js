@@ -3,9 +3,9 @@
 const Model = use('App/Models/Participante')
 
 class Participante {
-  async add (payload) {
+  async add (payload, trx) {
     try {
-      const participante = await Model.create(payload)
+      const participante = await Model.create(payload, trx)
       return participante
     } catch (error) {
       // eslint-disable-next-line no-throw-literal

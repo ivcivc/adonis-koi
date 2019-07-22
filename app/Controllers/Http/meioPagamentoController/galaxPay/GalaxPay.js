@@ -3,6 +3,8 @@
 const axios = require('axios')
 const Service = require('../../../../Services/GalaxPay')
 
+// const ServicePessoa = use('../../../../Services/Pessoa')
+
 const Env = use('Env')
 
 const _URL = Env.get('GALAXPAY_URL')
@@ -40,6 +42,13 @@ class GalaxPayController {
   async getBandeiras () {
     const bandeiras = await new Service().getBandeiras()
     return bandeiras
+  }
+
+  async getCPF ({ request }) {
+    const { cpf } = request.all()
+    const retorno = await new Service().getCPF(cpf)
+
+    return retorno
   }
 }
 

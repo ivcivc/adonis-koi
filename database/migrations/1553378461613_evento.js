@@ -40,10 +40,14 @@ class EventoSchema extends Schema {
 
       table.text('obs')
 
-      table.string('siteExibir').notNullable()
+      table
+        .string('siteExibir')
+        .notNullable()
+        .index()
       table.integer('siteParcelas')
       table.string('siteEvento').notNullable()
       table.text('siteDetalhes')
+      table.text('siteLink')
 
       table.timestamps()
     })
