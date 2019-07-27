@@ -1,7 +1,7 @@
 'use strict'
 
 const axios = require('axios')
-const Service = require('../../../../../../Services/GalaxPay')
+const Service = require('App/Services/GalaxPay')
 
 // const ServicePessoa = use('../../../../Services/Pessoa')
 

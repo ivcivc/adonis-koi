@@ -4,6 +4,43 @@ const Model = use('App/Models/Pessoa')
 // const Database = use('Database')
 
 class Pessoa {
+  async update (data, trx) {
+    try {
+      let endereco = null
+
+      if (data.endereco) {
+        endereco = data.endereco
+      }
+      delete data['endereco']
+
+      let grupos = null
+      grupos = data.grupos
+      delete data['grupos']
+
+      let pessoa = await Model.findOrFail(data.id)
+
+      pessoa.merge(data)
+
+      let end = await pessoa.endereco().fetch()
+
+      if (end) {
+        await end.delete()
+      }
+
+      if (endereco) {
+        await pessoa.endereco().create(endereco, null, trx)
+      }
+
+      await pessoa.grupos().sync(grupos, null, trx)
+
+      await pessoa.save(trx)
+
+      return pessoa
+    } catch (e) {
+      throw e
+    }
+  }
+
   async add (data, trx) {
     try {
       let endereco = null

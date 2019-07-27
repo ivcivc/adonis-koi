@@ -18,6 +18,10 @@ class Participante extends Model {
   consultor () {
     return this.belongsTo('App/Models/Pessoa', 'consultor_id')
   }
+
+  padrinho () {
+    return this.belongsTo('App/Models/Pessoa', 'padrinho_id')
+  }
 }
 
 module.exports = Participante

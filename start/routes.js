@@ -184,6 +184,8 @@ Route.group(() => {
   Route.post('/site', 'SiteController.addContrato')
   Route.put('/site', 'SiteController.updateContrato')
   Route.get('/site/getEventosSite', 'SiteController.getEventosSite')
+  Route.get('/site/getBandeiras', 'SiteController.getBandeiras')
+  Route.post('/site/getCPF', 'SiteController.getCPF')
 
   /* Route.post('/receber', 'ReceberController.store')
 Route.put('/receber/:id', 'ReceberController.update')

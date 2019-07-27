@@ -27,6 +27,15 @@ class ParticipanteSchema extends Schema {
         .onDelete('RESTRICT')
 
       table
+        .integer('padrinho_id')
+        .unsigned()
+        .default(null)
+        .references('id')
+        .inTable('pessoas')
+        .onUpdate('CASCADE')
+        .onDelete('RESTRICT')
+
+      table
         .integer('consultor_id')
         .unsigned()
         .default(null)

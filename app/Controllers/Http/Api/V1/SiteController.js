@@ -21,7 +21,16 @@ moment.locale('pt-BR')
 
 class SiteController {
   async addContrato ({ request, response }) {
-    const { pessoa, evento_id, card, pagto } = request.all()
+    const {
+      pessoa,
+      evento_id,
+      card,
+      pagto,
+      endereco,
+      complemento
+    } = request.all()
+
+    let isTransaction = true
 
     const trx = await Database.beginTransaction()
 
@@ -59,16 +68,50 @@ class SiteController {
       const query = Pessoa.query()
       const pessoa_data = await query
         .where('cpf', 'LIKE', `${pessoa.cpf}`)
+        .with('endereco')
+        .with('grupos')
         .fetch()
 
       // eslint-disable-next-line no-unused-vars
       let pessoa_id = null
 
+      const enderecoUpdate = {
+        logradouro: endereco.logradouro,
+        compl: endereco.compl,
+        bairro: endereco.bairro,
+        cidade: endereco.cidade,
+        estado: endereco.estado,
+        cep: endereco.cep
+      }
+
       if (pessoa_data.rows.length > 0) {
         pessoa_id = pessoa_data.rows[0].id
+        let pessoaJson = pessoa_data.rows[0].toJSON()
+        pessoaJson.nome = pessoa.nome
+        pessoaJson.email = pessoa.email
+        pessoaJson.profissao = pessoa.profissao
+        pessoaJson.sexo = pessoa.sexo
+        pessoaJson.dnasc = pessoa.dnasc
+        pessoaJson.estado_civil = pessoa.estado_civil
+        pessoaJson.facebook = pessoa.facebook
+        pessoaJson.instagram = pessoa.instagram
+        pessoaJson.tel_celular = pessoa.tel_celular
+        pessoaJson.camisa = pessoa.camisa
+        pessoaJson.endereco = enderecoUpdate
+        const pessoaGrupos = pessoaJson.grupos
+        let pessoasGruposID = []
+        pessoaGrupos.forEach(e => {
+          pessoasGruposID.push(e.id)
+        })
+        pessoaJson.grupos = pessoasGruposID
+
+        console.log('pessoaJSON ', pessoaJson)
+
+        await new ServicePessoa().update(pessoaJson, trx)
       } else {
         // Adicionar um aluno
         pessoa.grupos = grupoAluno
+        pessoa.endereco = endereco
         const addPessoa = await new ServicePessoa().add(pessoa, trx)
         pessoa_id = addPessoa.id
       }
@@ -76,7 +119,8 @@ class SiteController {
       const participanteData = {
         evento_id,
         pessoa_id,
-        consultor_id: null,
+        padrinho_id: complemento.padrinho_id,
+        consultor_id: complemento.consultor_id,
         pagarConsultor: true,
         treinamentoConcluido: true,
         parcelas: pagto.parcela,
@@ -140,7 +184,10 @@ class SiteController {
 
       console.log(integrationIds)
 
+      console.log('commitando....')
+
       await trx.commit()
+      isTransaction = false
 
       const valorPagar = pagto.valor.toFixed(2)
 
@@ -168,20 +215,29 @@ class SiteController {
           brand: card.cardBrand
         }
       }
-
+      console.log('pagamento..... ')
       const pay = await new ServiceGalaxyPay().createPaymentBillAndCustomer(
         sendPay
       )
 
+      console.log('saindo do pagamento ', pay)
+
       if (pay.type === false) {
         // deletar
+        await new ServiceReceber().destroy(receber_id)
+        throw pay
       } else {
         const paymentBillInternalId = pay.paymentBillInternalId
       }
 
+      console.log('status ok')
+
       return response.status(200).send(pay)
     } catch (e) {
-      await trx.rollback()
+      console.log('falha na transação....', e)
+      if (isTransaction) {
+        await trx.rollback()
+      }
       return response.status(400).send(e)
     }
   }
@@ -200,6 +256,19 @@ class SiteController {
     const eventos = await query.fetch()
 
     return eventos
+  }
+
+  async getBandeiras () {
+    const bandeiras = await new ServiceGalaxyPay().getBandeiras()
+    return bandeiras
+  }
+
+  async getCPF ({ request }) {
+    const { cpf } = request.all()
+    console.log('buscando cpf ')
+    const retorno = await new ServiceGalaxyPay().getCPF(cpf)
+
+    return retorno
   }
 
   async retorno ({ request }) {

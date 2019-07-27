@@ -23,21 +23,24 @@ const Auth = {
  */
 class GalaxPay {
   async createPaymentBillAndCustomer (payload) {
-    const url = `${_URL}/createPaymentBillAndCustomer`
-    const data = {
-      Auth,
-      Request: payload
-    }
+    return new Promise((resolve, reject) => {
+      const url = `${_URL}/createPaymentBillAndCustomer`
+      const data = {
+        Auth,
+        Request: payload
+      }
 
-    const retorno = await axios
-      .post(url, data)
-      .then(res => {
-        return res.data
-      })
-      .catch(e => {
-        return e.data
-      })
-    return retorno
+      axios
+        .post(url, data)
+        .then(res => {
+          console.log('galaxy resolvido')
+          resolve(res.data)
+        })
+        .catch(e => {
+          console.log('galax falhou')
+          reject(e.data)
+        })
+    })
   }
 
   async getPessoaCartoes (ID) {
