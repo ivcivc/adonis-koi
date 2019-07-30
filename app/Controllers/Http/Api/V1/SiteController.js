@@ -336,6 +336,7 @@ class SiteController {
       const billInternalId = r.data.billInternalId
 
       console.log('contrato... ', billInternalId)
+      console.log('URL= ', _URL)
       const contrato = await this.getPaymentBillInfo(billInternalId)
       console.log('contrato= ', contrato.toJSON())
 
