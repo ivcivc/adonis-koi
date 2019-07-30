@@ -273,6 +273,30 @@ class SiteController {
     return retorno
   }
 
+  async getPaymentBillInfo (ID) {
+    // Retorna todas as informações do pagamento e suas transações.
+    const url = `${_URL}/getPaymentBillInfo`
+    const data = {
+      method: 'get',
+      responseType: 'json',
+      url,
+      data: {
+        Auth,
+        Request: {
+          internalId: `${ID}`
+        }
+      }
+    }
+    const retorno = await axios(data)
+      .then(res => {
+        return res.data
+      })
+      .catch(e => {
+        return e.data
+      })
+    return retorno
+  }
+
   async retorno ({ request, response }) {
     const r = request.all()
     console.log(r)
@@ -297,6 +321,11 @@ class SiteController {
       console.log('registro...... salvando....')
 
       await registro.save()
+
+      const billInternalId = r.data.billInternalId
+
+      const contrato = await this.getPaymentBillInfo(billInternalId)
+      console.log('contrato= ', contrato.toJSON())
 
       return response.status(200).send({ message: 'Ok' })
     } catch (e) {
