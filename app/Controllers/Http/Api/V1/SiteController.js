@@ -286,6 +286,7 @@ class SiteController {
 
   async getPaymentBillInfo (ID) {
     // Retorna todas as informações do pagamento e suas transações.
+    console.log('entrei em getPaymentBillInfo')
     const url = `${_URL}/getPaymentBillInfo`
     const data = {
       method: 'get',
@@ -305,6 +306,7 @@ class SiteController {
       .catch(e => {
         return e.data
       })
+    console.log('retornei getPaymentBillInfo() ', retorno)
     return retorno
   }
 
