@@ -281,7 +281,7 @@ class SiteController {
     const ID = parseInt(r.data.transactionIntegrationId)
 
     const registro = await ServiceReceberItem.findOrFail(ID)
-
+    console.log('ID ', registro.id)
     registro.paymentBillInternalId = r.transactionInternalId // id da parcela
     registro.paymentBillIntegrationId = r.transactionIntegrationId // 2@
     registro.authorizationCode = r.authorizationCode
