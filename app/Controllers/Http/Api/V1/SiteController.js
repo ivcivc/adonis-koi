@@ -18,6 +18,8 @@ const ServiceGalaxyPay = use('App/Services/GalaxPay')
 
 const ServiceGrupo = use('App/Services/Grupo')
 
+const axios = require('axios')
+
 const Env = use('Env')
 
 const _URL = Env.get('GALAXPAY_URL')
