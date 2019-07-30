@@ -330,6 +330,8 @@ class SiteController {
 
       return response.status(200).send({ message: 'Ok' })
     } catch (e) {
+      console.log('excessão gerada ')
+      console.log('e')
       return response.status(400).send({ message: 'Não localizado!' })
     }
   }
