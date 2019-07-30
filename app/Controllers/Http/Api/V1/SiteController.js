@@ -293,7 +293,7 @@ class SiteController {
     registro.payDay = r.payday
     registro.installmentNumber = r.installmentNumber
 
-    console.log('registro...... salvando...')
+    console.log('registro...... salvando....')
 
     registro.save()
 
