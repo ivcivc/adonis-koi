@@ -18,6 +18,17 @@ const ServiceGalaxyPay = use('App/Services/GalaxPay')
 
 const ServiceGrupo = use('App/Services/Grupo')
 
+const Env = use('Env')
+
+const _URL = Env.get('GALAXPAY_URL')
+const _ID = Env.get('GALAXPAY_ID')
+const _HASH = Env.get('GALAXPAY_HASH')
+
+const Auth = {
+  galaxId: _ID,
+  galaxHash: _HASH
+}
+
 const moment = require('moment')
 moment.locale('pt-BR')
 
