@@ -280,26 +280,28 @@ class SiteController {
     console.log('transação= ', r.data.transactionIntegrationId)
     const ID = parseInt(r.data.transactionIntegrationId)
 
-    const registro = await ServiceReceberItem.findOrFail(ID)
-    console.log('ID ', registro.id)
-    registro.paymentBillInternalId = r.data.transactionInternalId // id da parcela
-    registro.paymentBillIntegrationId = r.data.transactionIntegrationId // 2@
-    registro.authorizationCode = r.data.authorizationCode
-    registro.status = r.data.status
-    registro.statusDescription = r.data.statusDescription
-    registro.lastUpdateDate = r.data.statusInsertDate
+    try {
+      const registro = await ServiceReceberItem.findOrFail(ID)
+      console.log('ID ', registro.id)
+      registro.paymentBillInternalId = r.data.transactionInternalId // id da parcela
+      registro.paymentBillIntegrationId = r.data.transactionIntegrationId // 2@
+      registro.authorizationCode = r.data.authorizationCode
+      registro.status = r.data.status
+      registro.statusDescription = r.data.statusDescription
+      registro.lastUpdateDate = r.data.statusInsertDate
 
-    registro.value = r.data.value
-    registro.payDay = r.data.payday
-    // registro.installmentNumber = r.installmentNumber
+      registro.value = r.data.value
+      registro.payDay = r.data.payday
+      // registro.installmentNumber = r.installmentNumber
 
-    console.log('registro...... salvando....')
+      console.log('registro...... salvando....')
 
-    await registro.save()
+      await registro.save()
 
-    console.log('json ', registro.toJSON())
-
-    return response.status(200).send(registro)
+      return response.status(200).send({ message: 'Ok' })
+    } catch (e) {
+      return response.status(400).send({ message: 'Não localizado!' })
+    }
   }
 }
 
