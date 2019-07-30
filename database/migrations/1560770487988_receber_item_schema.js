@@ -35,6 +35,8 @@ class ReceberItemSchema extends Schema {
         .onUpdate('CASCADE')
         .onDelete('RESTRICT')
 
+      table.string('webhookId', 15)
+
       table.timestamps()
 
       // alter table

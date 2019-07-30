@@ -7,6 +7,8 @@ const Pessoa = use('App/Models/Pessoa')
 
 const Evento = use('App/Models/Evento')
 
+const ServiceReceberItem = use('App/Models/ReceberItem')
+
 const ServicePessoa = use('App/Services/Pessoa')
 const ServiceEvento = use('App/Services/Evento')
 const ServiceParticipante = use('App/Services/Participante')
@@ -275,6 +277,23 @@ class SiteController {
     const r = request.all()
     console.log(r)
     console.log('data = ', r.data.billInternalId)
+    console.log('transação= ', r.data.transactionIntegrationId)
+    const ID = parseInt(r.data.transactionIntegrationId)
+
+    const registro = await ServiceReceberItem.findOrFail(ID)
+
+    registro.paymentBillInternalId = r.transactionInternalId // id da parcela
+    registro.paymentBillIntegrationId = r.transactionIntegrationId // 2@
+    registro.authorizationCode = r.authorizationCode
+    registro.status = r.status
+    registro.statusDescription = r.statusDescription
+    registro.lastUpdateDate = r.statusInsertDate
+
+    registro.value = r.value
+    registro.payDay = r.payday
+    registro.installmentNumber = r.installmentNumber
+
+    registro.save()
 
     return response.status(200).send(r)
   }
