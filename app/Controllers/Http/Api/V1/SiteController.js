@@ -295,7 +295,7 @@ class SiteController {
 
     console.log('registro...... salvando....')
 
-    registro.save()
+    await registro.save()
 
     console.log('json ', registro.toJSON())
 
