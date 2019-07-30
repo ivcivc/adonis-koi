@@ -282,16 +282,16 @@ class SiteController {
 
     const registro = await ServiceReceberItem.findOrFail(ID)
     console.log('ID ', registro.id)
-    registro.paymentBillInternalId = r.transactionInternalId // id da parcela
-    registro.paymentBillIntegrationId = r.transactionIntegrationId // 2@
-    registro.authorizationCode = r.authorizationCode
-    registro.status = r.status
-    registro.statusDescription = r.statusDescription
-    registro.lastUpdateDate = r.statusInsertDate
+    registro.paymentBillInternalId = r.data.transactionInternalId // id da parcela
+    registro.paymentBillIntegrationId = r.data.transactionIntegrationId // 2@
+    registro.authorizationCode = r.data.authorizationCode
+    registro.status = r.data.status
+    registro.statusDescription = r.data.statusDescription
+    registro.lastUpdateDate = r.data.statusInsertDate
 
-    registro.value = r.value
-    registro.payDay = r.payday
-    registro.installmentNumber = r.installmentNumber
+    registro.value = r.data.value
+    registro.payDay = r.data.payday
+    // registro.installmentNumber = r.installmentNumber
 
     console.log('registro...... salvando....')
 
