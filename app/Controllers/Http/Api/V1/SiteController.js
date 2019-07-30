@@ -273,7 +273,7 @@ class SiteController {
     return retorno
   }
 
-  async retorno ({ request }) {
+  async retorno ({ request, response }) {
     const r = request.all()
     console.log(r)
     console.log('data = ', r.data.billInternalId)
