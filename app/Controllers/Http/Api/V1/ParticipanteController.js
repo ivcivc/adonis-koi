@@ -13,6 +13,8 @@ class ParticipanteController {
 
     const query = Participante.query()
 
+    console.log('eita.......................')
+
     // eslint-disable-next-line camelcase
     if (!evento_id) {
       return response
@@ -27,6 +29,8 @@ class ParticipanteController {
     query.with('pessoa')
     query.with('consultor')
     query.with('evento')
+    query.with('receber')
+    // query.with('recebimentos')
 
     // try {
     const reg = await query.fetch()

@@ -22,6 +22,14 @@ class Participante extends Model {
   padrinho () {
     return this.belongsTo('App/Models/Pessoa', 'padrinho_id')
   }
+
+  receber () {
+    return this.belongsTo('App/Models/Receber', 'id', 'participante_id')
+  }
+
+  /* recebimentos () {
+    return this.hasMany('App/Models/Receber')
+  } */
 }
 
 module.exports = Participante
