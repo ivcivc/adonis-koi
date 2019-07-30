@@ -293,9 +293,13 @@ class SiteController {
     registro.payDay = r.payday
     registro.installmentNumber = r.installmentNumber
 
+    console.log('registro...... salvando...')
+
     registro.save()
 
-    return response.status(200).send(r)
+    console.log('json ', registro.toJSON())
+
+    return response.status(200).send(registro)
   }
 }
 
