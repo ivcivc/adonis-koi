@@ -15,7 +15,7 @@ const ServiceParticipante = use('App/Services/Participante')
 const ServiceReceber = use('App/Services/Receber')
 const ServiceGalaxyPay = use('App/Services/GalaxPay')
 
-const receberModel = use('App/Services/Receber')
+const receberModel = use('App/Models/Receber')
 // const ServiceReceberItem = use('App/Services/ReceberItem')
 
 const ServiceGrupo = use('App/Services/Grupo')
