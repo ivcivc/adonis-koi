@@ -182,6 +182,8 @@ class SiteController {
 
       let integrationIds = {}
 
+      console.log('card.parcelas= ', card.parcelas)
+
       for (let i = 0; i < card.parcelas; i++) {
         let valor = pagto.valor
         console.log('construindo parcela: ', i)
