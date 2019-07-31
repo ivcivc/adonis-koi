@@ -14,6 +14,8 @@ const ServiceEvento = use('App/Services/Evento')
 const ServiceParticipante = use('App/Services/Participante')
 const ServiceReceber = use('App/Services/Receber')
 const ServiceGalaxyPay = use('App/Services/GalaxPay')
+
+const receberModel = use('App/Services/Receber')
 // const ServiceReceberItem = use('App/Services/ReceberItem')
 
 const ServiceGrupo = use('App/Services/Grupo')
@@ -347,7 +349,7 @@ class SiteController {
       console.log('contrato.... receber_id= ', receber_id)
       /// console.log(contrato)
 
-      const receber = await ServiceReceber.findOrFail(receber_id)
+      const receber = await receberModel.findOrFail(receber_id)
       receber.status = contrato.paymentBill.status
       receber.statusDescription = contrato.paymentBill.statusDescription
       receber.save()
