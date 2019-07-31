@@ -344,6 +344,9 @@ class SiteController {
       console.log('URL= ', _URL)
       const contrato = await this.getPaymentBillInfo(billInternalId)
 
+      console.log('contrato.... ')
+      console.log(contrato)
+
       const receber = await ServiceReceber.findOrFail(receber_id)
       receber.status = contrato.paymentBill.status
       receber.statusDescription = contrato.paymentBill.statusDescription
