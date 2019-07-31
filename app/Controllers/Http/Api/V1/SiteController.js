@@ -331,7 +331,8 @@ class SiteController {
 
       registro.value = r.data.value
       registro.payDay = r.data.payday
-      // registro.installmentNumber = r.installmentNumber
+
+      const receber_id = registro.receber_id
 
       console.log('registro...... salvando....')
 
@@ -342,7 +343,13 @@ class SiteController {
       console.log('contrato... ', billInternalId)
       console.log('URL= ', _URL)
       const contrato = await this.getPaymentBillInfo(billInternalId)
-      console.log('contrato= ', contrato.toJSON())
+
+      const receber = await ServiceReceber.findOrFail(receber_id)
+      receber.status = contrato.paymentBill.status
+      receber.statusDescription = contrato.paymentBill.statusDescription
+      receber.save()
+
+      // console.log('contrato= ', contrato.toJSON())
 
       return response.status(200).send({ message: 'Ok' })
     } catch (e) {
