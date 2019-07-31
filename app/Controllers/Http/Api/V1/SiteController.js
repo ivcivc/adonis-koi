@@ -182,9 +182,9 @@ class SiteController {
 
       let integrationIds = {}
 
-      console.log('card.parcelas= ', card.parcelas)
+      console.log('card.parcelas= ', pagto.parcela)
 
-      for (let i = 0; i < card.parcelas; i++) {
+      for (let i = 0; i < pagto.parcela; i++) {
         let valor = pagto.valor
         console.log('construindo parcela: ', i)
         const items = await addReceber.receberItems().create(
