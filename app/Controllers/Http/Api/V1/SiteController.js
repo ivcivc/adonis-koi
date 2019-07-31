@@ -184,6 +184,7 @@ class SiteController {
 
       for (let i = 0; i < card.parcelas; i++) {
         let valor = pagto.valor
+        console.log('construindo parcela: ', i)
         const items = await addReceber.receberItems().create(
           {
             installmentNumber: i + 1,
@@ -199,7 +200,7 @@ class SiteController {
         integrationIds[`${parseInt(i) + 1}`] = { integrationId: `${items.id}` }
       }
 
-      console.log(integrationIds)
+      console.log('integrationIds: ', integrationIds)
 
       console.log('commitando....')
 
@@ -240,10 +241,12 @@ class SiteController {
       console.log('saindo do pagamento ', pay)
 
       if (pay.type === false) {
+        console.log('galax false')
         // deletar
         await new ServiceReceber().destroy(receber_id)
         throw pay
       } else {
+        console.log('galax true')
         const paymentBillInternalId = pay.paymentBillInternalId
       }
 
