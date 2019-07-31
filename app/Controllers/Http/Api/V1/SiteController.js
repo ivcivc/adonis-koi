@@ -344,8 +344,8 @@ class SiteController {
       console.log('URL= ', _URL)
       const contrato = await this.getPaymentBillInfo(billInternalId)
 
-      console.log('contrato.... ')
-      console.log(contrato)
+      console.log('contrato.... receber_id= ', receber_id)
+      /// console.log(contrato)
 
       const receber = await ServiceReceber.findOrFail(receber_id)
       receber.status = contrato.paymentBill.status
@@ -357,7 +357,7 @@ class SiteController {
       return response.status(200).send({ message: 'Ok' })
     } catch (e) {
       console.log('excessão gerada ')
-      console.log('e')
+      console.log('error ', e.message)
       return response.status(400).send({ message: 'Não localizado!' })
     }
   }
