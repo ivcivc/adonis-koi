@@ -354,6 +354,8 @@ class SiteController {
       receber.statusDescription = contrato.paymentBill.statusDescription
       receber.save()
 
+      console.log('status contrato= ', contrato.paymentBill.status)
+
       // console.log('contrato= ', contrato.toJSON())
 
       return response.status(200).send({ message: 'Ok' })
