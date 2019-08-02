@@ -37,6 +37,7 @@ class EventoSchema extends Schema {
       table.date('dTermino')
 
       table.float('valorBase').default(0.0)
+      table.float('valorBaseAVista').default(0.0)
 
       table.text('obs')
 

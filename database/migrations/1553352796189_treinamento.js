@@ -13,6 +13,7 @@ class TreinamentoSchema extends Schema {
         .notNullable()
         .unique()
       table.string('status', 10).notNullable()
+      table.float('valorBaseAVista', 10, 2).defaultTo(0.0)
       table.float('valor', 10, 2).defaultTo(0.0)
 
       table.timestamps()

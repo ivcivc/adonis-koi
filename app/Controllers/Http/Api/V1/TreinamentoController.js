@@ -41,10 +41,10 @@ class TreinamentoController {
   }
 
   async update ({ params, request, response }) {
-    const { nome, valor, status } = request.all()
+    const { nome, valor, valorBaseAVista, status } = request.all()
     try {
       let treinamento = await Treinamento.findOrFail(params.id)
-      treinamento.merge({ nome, valor, status })
+      treinamento.merge({ nome, valorBaseAVista, valor, status })
       await treinamento.save()
       return treinamento
     } catch (e) {
