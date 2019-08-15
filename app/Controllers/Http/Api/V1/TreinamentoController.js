@@ -4,7 +4,7 @@ const Treinamento = use('App/Models/Treinamento')
 const lodash = require('lodash')
 
 /**
- * Resourceful controller for interacting with treinamentos..
+ * Resourceful controller for interacting with treinamentos...
  */
 class TreinamentoController {
   async index ({ request, response }) {
