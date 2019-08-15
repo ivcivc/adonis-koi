@@ -2,6 +2,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable camelcase */
 'use strict'
+const Mail = use('Mail')
+
 const Database = use('Database')
 const Pessoa = use('App/Models/Pessoa')
 
@@ -27,6 +29,8 @@ const Env = use('Env')
 const _URL = Env.get('GALAXPAY_URL')
 const _ID = Env.get('GALAXPAY_ID')
 const _HASH = Env.get('GALAXPAY_HASH')
+
+const _MAIL_EMPRESA = Env.get('MAIL_EMPRESA')
 
 const Auth = {
   galaxId: _ID,
@@ -71,8 +75,7 @@ class SiteController {
 
       const valorParcelaCheck = pagto.parcela * pagto.valor
       if (
-        valorParcelaCheck > evento.valorBase ||
-        valorParcelaCheck > evento.valorBase ||
+        valorParcelaCheck < evento.valorBase ||
         evento.valorBase - valorParcelaCheck > 0.12
       ) {
         throw {
@@ -132,6 +135,8 @@ class SiteController {
         const addPessoa = await new ServicePessoa().add(pessoa, trx)
         pessoa_id = addPessoa.id
       }
+
+      const email = pessoa_data.rows[0].email
 
       const participanteData = {
         evento_id,
@@ -250,6 +255,24 @@ class SiteController {
       } else {
         console.log('galax true')
         const paymentBillInternalId = pay.paymentBillInternalId
+      }
+
+      if (evento.emailBoasVindas) {
+        if (evento.emailBoasVindas.length > 0) {
+          console.log('titulo tamanho ', evento.emailBoasVindas.length)
+          await Mail.send(
+            ['emails.boas_vindas'],
+            {
+              emailBoasVindas: evento.emailBoasVindas
+            },
+            message => {
+              message
+                .to(_MAIL_EMPRESA)
+                .from(email)
+                .subject(evento.emailBoasVindasTitulo)
+            }
+          )
+        }
       }
 
       console.log('status ok')

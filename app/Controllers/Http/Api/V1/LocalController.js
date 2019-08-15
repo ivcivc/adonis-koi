@@ -4,6 +4,8 @@ const Local = use('App/Models/Local')
 
 class LocalController {
   async index ({ request, response }) {
+    const page = request.input('page')
+    const limit = request.input('limit')
     const status = request.input('status')
     const nome = request.input('nome')
     const sortSelector = request.input('sortSelector')
@@ -24,7 +26,7 @@ class LocalController {
       query.orderBy('nome', 'ASC')
     }
 
-    const dados = await query.paginate()
+    const dados = await query.paginate(page, limit)
     return dados
   }
 

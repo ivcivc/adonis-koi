@@ -8,14 +8,24 @@ const Treinamento = use('App/Models/Treinamento')
 class TreinamentoController {
   async index ({ request, response }) {
     const status = request.input('status')
+    const page = request.input('page')
+    const limit = request.input('limit')
+    const sortSelector = request.input('sortSelector')
+    const sortDirection = request.input('sortDirection')
 
     const query = Treinamento.query()
+
+    if (sortSelector) {
+      query.orderBy(sortSelector, sortDirection)
+    } else {
+      query.orderBy('nome', 'ASC')
+    }
 
     if (status) {
       query.where('status', 'LIKE', status)
     }
 
-    const dados = await query.paginate()
+    const dados = await query.paginate(page, limit)
     return dados
   }
 
