@@ -1,6 +1,7 @@
 'use strict'
 
 const Treinamento = use('App/Models/Treinamento')
+const lodash = require('lodash')
 
 /**
  * Resourceful controller for interacting with treinamentos.
@@ -25,7 +26,13 @@ class TreinamentoController {
       query.where('status', 'LIKE', status)
     }
 
-    const dados = await query.paginate(page, limit)
+    let dados = null
+
+    if (!lodash.isEmpty(page)) {
+      dados = await query.paginate(page, limit)
+    }
+
+    dados = await query.paginate()
     return dados
   }
 
