@@ -50,6 +50,13 @@ class EventoSchema extends Schema {
       table.text('siteDetalhes')
       table.text('siteLink')
 
+      table.text('emailBoasVindas')
+      table.text('emailBoasVindasTitulo')
+
+      table.text('emailInformativo')
+      table.text('emailInformativoTitulo')
+      table.date('dDisparoEmail')
+
       table.timestamps()
     })
   }

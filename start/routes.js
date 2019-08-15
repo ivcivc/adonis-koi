@@ -180,6 +180,10 @@ Route.group(() => {
   // Route.post('/pessoas', 'PessoaController.store').validator('pessoa/Add')
 
   //
+  Route.post(
+    '/email/dispararEmailInformativo',
+    'EmailController.dispararEmailInformativo'
+  )
 
   Route.post('/site', 'SiteController.addContrato')
   Route.put('/site', 'SiteController.updateContrato')
@@ -199,7 +203,22 @@ Route.get('/receber/:id', 'ReceberController.show') */
 
   Route.get('/getStatusTransaction', 'StatusTransactionController.getStatus')
 
+  Route.resource('/prospeccao', 'ProspeccaoController').apiOnly()
+
   Route.post('/retorno', 'SiteController.retorno')
+
+  Route.get(
+    '/dashboard/getTodosTreinamentosAluno/:id',
+    'Dashboard/AlunoController.getTodosTreinamentosAluno'
+  )
+
+  Route.post('maladireta/localizar', 'MaladiretaController.localizar')
+  Route.post('maladireta/dispararEmail', 'MaladiretaController.dispararEmail')
+  Route.post(
+    'maladireta/disparoTeste',
+    'MaladiretaController.dispararTesteEmail'
+  )
+  Route.post('maladireta/disparo', 'MaladiretaController.dispararEmail')
 })
   .prefix('api/v1')
   .namespace('Api/V1')
