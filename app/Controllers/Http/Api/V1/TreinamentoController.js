@@ -3,7 +3,7 @@
 const Treinamento = use('App/Models/Treinamento')
 
 /**
- * Resourceful controller for interacting with treinamentos
+ * Resourceful controller for interacting with treinamentos.
  */
 class TreinamentoController {
   async index ({ request, response }) {
