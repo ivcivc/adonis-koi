@@ -55,6 +55,7 @@ class Receber {
   }
 
   async destroy (ID) {
+    console.log('EXCLUIR ESTE ID= ', ID)
     try {
       const receber = await Model.findOrFail(ID)
       await receber.delete()
@@ -63,7 +64,7 @@ class Receber {
       if (error.code === 'E_MISSING_DATABASE_ROW') {
         throw { message: 'Conta a receber não localizada.' }
       }
-      throw { message: 'Não é possível excluir o registro selecionado.' }
+      throw { message: 'Não foi possível excluir o registro selecionado.' }
     }
   }
 

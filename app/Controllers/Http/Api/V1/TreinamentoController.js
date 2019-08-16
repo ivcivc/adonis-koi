@@ -37,10 +37,15 @@ class TreinamentoController {
   }
 
   async store ({ request, response }) {
-    const { nome, valor, status } = request.all()
+    const { nome, valor, valorBaseAVista, status } = request.all()
 
     try {
-      const treinamento = await Treinamento.create({ nome, valor, status })
+      const treinamento = await Treinamento.create({
+        nome,
+        valor,
+        valorBaseAVista,
+        status
+      })
       return treinamento
     } catch (error) {
       return response.status(400).send('Não foi possível criar um Treinamento.')
