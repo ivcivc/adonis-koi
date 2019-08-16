@@ -33,7 +33,7 @@ class ReceberItemSchema extends Schema {
         .references('id')
         .inTable('recebers')
         .onUpdate('CASCADE')
-        .onDelete('RESTRICT')
+        .onDelete('CASCADE')
 
       table.string('webhookId', 15)
 

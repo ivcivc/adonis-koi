@@ -40,6 +40,13 @@ const Auth = {
 const moment = require('moment')
 moment.locale('pt-BR')
 
+// eslint-disable-next-line no-extend-native
+Number.prototype.toFixedDown = function (digits) {
+  var n = this - Math.pow(10, -digits) / 2
+  n += n / Math.pow(2, 53)
+  return n.toFixed(digits)
+}
+
 class SiteController {
   async addContrato ({ request, response }) {
     const {
@@ -63,7 +70,7 @@ class SiteController {
       if (evento.siteExibir === 'NÃO') {
         throw { message: 'Este evento não está disponível para venda.' }
       }
-      if (pagto.parcelas > evento.siteParcelas) {
+      if (pagto.parcela > evento.siteParcelas) {
         throw { message: 'Parcelamento não permitido para este Evento.' }
       }
 
@@ -85,6 +92,19 @@ class SiteController {
 
       const descontoCompra = evento.valorBase - valorParcelaCheck
 
+      let discounts = null
+
+      if (parseFloat(valorParcelaCheck).toFixedDown(2) > evento.valorBase) {
+        const desconto = parseFloat(
+          (valorParcelaCheck - evento.valorBase).toFixed(2)
+        ).toFixedDown(2)
+        discounts = {}
+        discounts[`${pagto.parcela}`] = {
+          valueDiscount: `${desconto}`,
+          info: 'Ajuste de valor'
+        }
+      }
+
       const query = Pessoa.query()
       const pessoa_data = await query
         .where('cpf', 'LIKE', `${pessoa.cpf}`)
@@ -103,6 +123,8 @@ class SiteController {
         estado: endereco.estado,
         cep: endereco.cep
       }
+
+      let email = null
 
       if (pessoa_data.rows.length > 0) {
         pessoa_id = pessoa_data.rows[0].id
@@ -127,6 +149,8 @@ class SiteController {
 
         console.log('pessoaJSON ', pessoaJson)
 
+        email = pessoa.email
+
         await new ServicePessoa().update(pessoaJson, trx)
       } else {
         // Adicionar um aluno
@@ -134,9 +158,10 @@ class SiteController {
         pessoa.endereco = endereco
         const addPessoa = await new ServicePessoa().add(pessoa, trx)
         pessoa_id = addPessoa.id
+        email = addPessoa.email
       }
 
-      const email = pessoa_data.rows[0].email
+      // const email = pessoa_data.rows[0].email
 
       const participanteData = {
         evento_id,
@@ -217,7 +242,7 @@ class SiteController {
       const valorPagar = pagto.valor.toFixed(2)
 
       const sendPay = {
-        integrationId: `##${receber_id}`,
+        integrationId: `@@${receber_id}`,
         typeBill: 'contract',
         payday: dataVenc,
         value: valorPagar,
@@ -240,6 +265,11 @@ class SiteController {
           brand: card.cardBrand
         }
       }
+
+      if (discounts) {
+        sendPay.discounts = discounts
+      }
+
       console.log('pagamento..... ')
       const pay = await new ServiceGalaxyPay().createPaymentBillAndCustomer(
         sendPay
