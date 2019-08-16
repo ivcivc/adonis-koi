@@ -384,7 +384,7 @@ class SiteController {
     const r = request.all()
     console.log(r)
     console.log('contrato = ', r.data.billInternalId)
-    console.log('parcela/transação= ', r.data.transactionIntegrationId)
+    console.log('/transação= ', r.data.transactionIntegrationId)
     // const ID = parseInt(r.data.billIntegrationId.replace('@@', ''))
     const ID = parseInt(r.data.transactionIntegrationId.replace('@@', ''))
 
@@ -403,7 +403,7 @@ class SiteController {
 
       const receber_id = registro.receber_id
 
-      console.log('registro...... salvando....')
+      console.log('registro...... salvando....*.')
 
       await registro.save()
 
