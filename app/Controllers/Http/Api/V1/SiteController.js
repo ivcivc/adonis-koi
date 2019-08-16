@@ -90,7 +90,7 @@ class SiteController {
         }
       }
 
-      const descontoCompra = evento.valorBase - valorParcelaCheck
+      let descontoCompra = 0.0
 
       let discounts = null
 
@@ -103,6 +103,7 @@ class SiteController {
           valueDiscount: `${desconto}`,
           info: 'Ajuste de valor'
         }
+        descontoCompra = desconto < 0 ? desconto * -1 : desconto
       }
 
       const query = Pessoa.query()
@@ -191,9 +192,9 @@ class SiteController {
         participante_id,
         periodicity: 'monthy',
         quantity: pagto.parcela,
-        liquido: pagto.valorBase,
-        desconto: descontoCompra,
-        value: evento.valorBase - descontoCompra,
+        liquido: pagto.valorBase + parseFloat(descontoCompra),
+        desconto: parseFloat(descontoCompra),
+        value: evento.valorBase,
         dateFirst: moment().format('YYYY-MM-DD'),
         status: 'auto',
         statusDescription: null,
@@ -216,6 +217,11 @@ class SiteController {
 
       for (let i = 0; i < pagto.parcela; i++) {
         let valor = pagto.valor
+        let desconto = 0.0
+        if (i + 1 === pagto.parcela) {
+          desconto = parseFloat(descontoCompra)
+        }
+
         console.log('construindo parcela: ', i)
         const items = await addReceber.receberItems().create(
           {
@@ -224,7 +230,9 @@ class SiteController {
             payDay: moment().format('YYYY-MM-DD'),
             status: 'auto',
             brand: card.cardBrand,
-            value: valor,
+            liquido: valor,
+            desconto: desconto,
+            value: valor - desconto,
             receber_id: receber_id
           },
           trx
@@ -375,9 +383,10 @@ class SiteController {
   async retorno ({ request, response }) {
     const r = request.all()
     console.log(r)
-    console.log('data = ', r.data.billInternalId)
-    console.log('transação= ', r.data.transactionIntegrationId)
-    const ID = parseInt(r.data.transactionIntegrationId)
+    console.log('contrato = ', r.data.billInternalId)
+    console.log('parcela/transação= ', r.data.transactionIntegrationId)
+    // const ID = parseInt(r.data.billIntegrationId.replace('@@', ''))
+    const ID = parseInt(r.data.transactionIntegrationId.replace('@@', ''))
 
     try {
       const registro = await ServiceReceberItem.findOrFail(ID)
