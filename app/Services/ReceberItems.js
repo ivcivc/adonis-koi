@@ -2,6 +2,7 @@
 'use strict'
 
 const Model = use('App/Models/ReceberItem')
+const ServiceReceber = use('App/Services/Receber')
 // const Database = use('Database')
 
 class ReceberItem {
@@ -24,8 +25,13 @@ class ReceberItem {
       const registro = await Model.findOrFail(ID)
       registro.merge(payload)
       await registro.save()
-      await registro.load('receber')
-      return registro
+
+      /* Atualizar status da conta a receber */
+      const receber = await new ServiceReceber().udpate(registro.receber_id, {
+        id: registro.receber_id
+      })
+
+      return { item: registro, receber }
     } catch (error) {
       if (error.name === 'ModelNotFoundException') {
         throw { message: 'Item da conta a Receber não localizada!' }

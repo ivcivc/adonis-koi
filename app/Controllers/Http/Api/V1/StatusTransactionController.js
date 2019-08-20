@@ -91,6 +91,11 @@ const status = [
     name: 'transmitir',
     displayName: 'Transmitir',
     status: 'galaxpay'
+  },
+  {
+    name: 'auto',
+    displayName: 'Aguardando',
+    status: 'galaxpay'
   }
 ]
 

@@ -47,6 +47,20 @@ Number.prototype.toFixedDown = function (digits) {
   return n.toFixed(digits)
 }
 
+function retira_acentos (palavra) {
+  const com_acento = 'áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÖÔÚÙÛÜÇ'
+  const sem_acento = 'aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC'
+  let nova = ''
+  for (let i = 0; i < palavra.length; i++) {
+    if (com_acento.search(palavra.substr(i, 1)) >= 0) {
+      nova += sem_acento.substr(com_acento.search(palavra.substr(i, 1)), 1)
+    } else {
+      nova += palavra.substr(i, 1)
+    }
+  }
+  return nova
+}
+
 class SiteController {
   async addContrato ({ request, response }) {
     const {
@@ -259,14 +273,14 @@ class SiteController {
         paymentType: 'newCard',
         integrationIds: integrationIds,
         Customer: {
-          integrationId: `#${pessoa_id}`,
+          integrationId: `##${pessoa_id}`,
           document: pessoa.cpf,
           name: pessoa.nome,
           email: pessoa.email
         },
         Card: {
           number: card.cardNumber,
-          holder: card.cardName,
+          holder: retira_acentos(card.cardName),
           expiryMonth: card.cardValidate.substr(0, 2),
           expiryYear: card.cardValidate.substr(2, 4),
           cvv: card.cardCode,
@@ -283,33 +297,39 @@ class SiteController {
         sendPay
       )
 
+      let lEnviarEmail = false
+
       console.log('saindo do pagamento ', pay)
 
       if (pay.type === false) {
         console.log('galax false')
         // deletar
         await new ServiceReceber().destroy(receber_id)
+        await new ServiceParticipante().destroy(participante_id)
         throw pay
       } else {
+        lEnviarEmail = true
         console.log('galax true')
         const paymentBillInternalId = pay.paymentBillInternalId
       }
 
-      if (evento.emailBoasVindas) {
-        if (evento.emailBoasVindas.length > 0) {
-          console.log('titulo tamanho ', evento.emailBoasVindas.length)
-          await Mail.send(
-            ['emails.boas_vindas'],
-            {
-              emailBoasVindas: evento.emailBoasVindas
-            },
-            message => {
-              message
-                .to(_MAIL_EMPRESA)
-                .from(email)
-                .subject(evento.emailBoasVindasTitulo)
-            }
-          )
+      if (lEnviarEmail) {
+        if (evento.emailBoasVindas) {
+          if (evento.emailBoasVindas.length > 0) {
+            console.log('titulo tamanho ', evento.emailBoasVindas.length)
+            await Mail.send(
+              ['emails.boas_vindas'],
+              {
+                emailBoasVindas: evento.emailBoasVindas
+              },
+              message => {
+                message
+                  .to(_MAIL_EMPRESA)
+                  .from(email)
+                  .subject(evento.emailBoasVindasTitulo)
+              }
+            )
+          }
         }
       }
 

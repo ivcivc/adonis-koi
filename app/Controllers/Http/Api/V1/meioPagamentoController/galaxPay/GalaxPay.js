@@ -1,7 +1,7 @@
 'use strict'
 
 const axios = require('axios')
-const Service = require('App/Services/GalaxPay')
+const Service = require('../../../../../../Services/GalaxPay')
 
 // const ServicePessoa = use('../../../../Services/Pessoa')
 
@@ -34,8 +34,9 @@ class GalaxPayController {
   }
 
   async getPessoaCartoes ({ params, response }) {
-    const ID = params.ID
-    const cartoes = await new Service().getPessoaCartoes(ID)
+    const ID = params.id
+    const cartoes = await new Service().getPessoaCartoes(`##${ID}`)
+
     return cartoes
   }
 

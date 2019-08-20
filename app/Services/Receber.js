@@ -3,6 +3,7 @@
 'use strict'
 
 const Model = use('App/Models/Receber')
+const lodash = require('lodash')
 
 class Receber {
   async add (payload, trx) {
@@ -31,10 +32,49 @@ class Receber {
     }
   }
 
-  async udpate (ID, payload) {
+  async update (ID, payload) {
     try {
       const receber = await Model.findOrFail(ID)
+      let alterarStatus = false
+
+      let items = await receber.receberItems().fetch()
+
+      if (lodash.has(payload, 'status')) {
+        receber.status = payload.status
+      }
+      let status = ''
+      let pago = 0.0
+
+      items.rows.forEach(e => {
+        if (receber.status !== 'canceled' && receber.meioPgto === 'koi') {
+          alterarStatus = true
+          if (e.status === 'liquidado') {
+            pago = pago + e.value
+          }
+        }
+      })
+
+      if (alterarStatus) {
+        if (
+          pago >= receber.value &&
+          receber.status !== 'canceled' &&
+          receber.meioPgto === 'koi'
+        ) {
+          payload.status = 'closed'
+          payload.statusDescription = 'Encerrada'
+        } else {
+          payload.status = 'active'
+          payload.statusDescription = 'Ativa'
+        }
+      }
+
+      /* receber
+        "emAberto"
+        "closed"
+        "canceled"
+       */
       receber.merge(payload)
+
       await receber.save()
       return receber
     } catch (error) {

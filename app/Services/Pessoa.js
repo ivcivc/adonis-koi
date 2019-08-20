@@ -83,7 +83,7 @@ class Pessoa {
   async getCPF (cpf) {
     try {
       const query = Model.query()
-      query.where('cpf', 'like', cpf)
+      query.where('cpf', '=', cpf)
       query.with('endereco')
       const pessoa = await query.fetch()
 
