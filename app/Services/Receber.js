@@ -28,7 +28,10 @@ class Receber {
       return receber
     } catch (error) {
       console.log(error.message)
-      throw { message: 'Não foi possível adicionar uma canta a receber.' }
+      throw {
+        message: 'Não foi possível adicionar uma canta a receber.',
+        message2: error.message
+      }
     }
   }
 
