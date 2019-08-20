@@ -35,7 +35,7 @@ Route.group(() => {
   )
 
   Route.get(
-    '/galaxPay/getPessoaCartoes/:ID',
+    '/galaxPay/getPessoaCartoes/:id',
     'meioPagamentoController/galaxPay/GalaxPay.getPessoaCartoes'
   )
 

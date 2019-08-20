@@ -8,11 +8,26 @@ const ServiceReceber = use('App/Services/Receber')
 const Pessoa = use('App/Models/Pessoa')
 
 const ServiceGalaxyPay = use('App/Services/GalaxPay')
+const ServiceParticipante = use('App/Services/Participante')
 
 Number.prototype.toFixedDown = function (digits) {
   var n = this - Math.pow(10, -digits) / 2
   n += n / Math.pow(2, 53)
   return n.toFixed(digits)
+}
+
+function retira_acentos (palavra) {
+  const com_acento = 'áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÖÔÚÙÛÜÇ'
+  const sem_acento = 'aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC'
+  let nova = ''
+  for (let i = 0; i < palavra.length; i++) {
+    if (com_acento.search(palavra.substr(i, 1)) >= 0) {
+      nova += sem_acento.substr(com_acento.search(palavra.substr(i, 1)), 1)
+    } else {
+      nova += palavra.substr(i, 1)
+    }
+  }
+  return nova
 }
 
 class ReceberController {
@@ -23,7 +38,9 @@ class ReceberController {
       const items = receber.receberItems
       delete receber.receberItems
 
-      receber.contaReceber_id= 1  // refazer
+      receber.contaReceber_id = 1 // refazer
+
+      let participante_id = receber.participante_id
 
       let isNewcard = receber.cardInternalId === '_new'
       if (receber.cardInternalId === undefined) {
@@ -33,22 +50,28 @@ class ReceberController {
 
       let cardEnviar = null
 
-      if (isNewcard) {
-        if (!card) {
-          // eslint-disable-next-line no-throw-literal
-          throw 'Cartão de crédito não informado.'
-        }
-        cardEnviar = {
-          number: card.cardNumber,
-          holder: card.cardName,
-          expiryMonth: card.cardValidate.substr(0, 2),
-          expiryYear: card.cardValidate.substr(3, 4),
-          cvv: card.cardCode,
-          brand: card.brand
-        }
-      } else {
-        cardEnviar = {
-          integrationId: receber.cardInternalId
+      if (receber.meioPgto === 'galaxpay') {
+        if (isNewcard) {
+          if (!card) {
+            if (receber.meioPgto === 'koi') {
+            } else {
+              // eslint-disable-next-line no-throw-literal
+              throw 'Cartão de crédito não informado.'
+            }
+          } else {
+            cardEnviar = {
+              number: card.cardNumber,
+              holder: retira_acentos(card.cardName),
+              expiryMonth: card.cardValidate.substr(0, 2),
+              expiryYear: card.cardValidate.substr(3, 4),
+              cvv: card.cardCode,
+              brand: card.brand
+            }
+          }
+        } else {
+          cardEnviar = {
+            integrationId: receber.cardInternalId
+          }
         }
       }
 
@@ -56,7 +79,8 @@ class ReceberController {
       const parcelas = receber.quantity
       const valor = receber.value
 
-      if (valorParcela * parcelas <= valor) {
+      if (valorParcela * parcelas < valor) {
+        // eslint-disable-next-line no-throw-literal
         throw 'Valor da parcela inválido.'
       }
       let discounts = null
@@ -76,7 +100,7 @@ class ReceberController {
 
       const receberModel = await new ServiceReceber().add(receber, trx)
 
-      if (receberModel.meioPgto === 'koi') {
+      /* if (receberModel.meioPgto === 'koi') {
         for (let index in items) {
           const receberModelItems = await receberModel
             .receberItems()
@@ -86,7 +110,7 @@ class ReceberController {
             integrationId: `${receberModelItems.id}`
           }
         }
-      }
+      } */
 
       if (receberModel.meioPgto === 'galaxpay') {
         for (let index = 0; index < parcelas; index++) {
@@ -95,7 +119,8 @@ class ReceberController {
             installmentNumber: parcelas,
             liquido: valorParcela,
             value: valorParcela,
-            status: 'auto'
+            status: 'auto',
+            statusDescription: 'Aguardando'
           }
           const receberModelItems = await receberModel
             .receberItems()
@@ -108,35 +133,63 @@ class ReceberController {
         // rceberItems = await receber.receberItems().create(items[0], trx)
       }
 
+      if (receberModel.meioPgto === 'koi') {
+        for (let index = 0; index < items.length; index++) {
+          await receberModel.receberItems().create(items[index], trx)
+        }
+        // rceberItems = await receber.receberItems().create(items[0], trx)
+      }
+
       const pessoa = await Pessoa.findOrFail(receber.pessoa_id)
 
-      const sendPay = {
-        integrationId: `@@${receberModel.id}`,
-        typeBill: 'contract',
-        payday: receber.dateFirst,
-        value: receber.valorParcela,
-        quantity: `${receber.quantity}`,
-        periodicity: 'monthly',
-        paymentType: isNewcard ? 'newCard' : 'existingCard',
-        integrationIds: integrationIds,
-        Customer: {
-          integrationId: `##${pessoa.id}`,
-          document: pessoa.cpf,
-          name: pessoa.nome,
-          email: pessoa.email
-        },
-        Card: card
+      let pay = null
+
+      if (receberModel.meioPgto === 'galaxpay') {
+        const sendPay = {
+          integrationId: `@@${receberModel.id}`,
+          typeBill: 'contract',
+          payday: receber.dateFirst,
+          value: receber.valorParcela,
+          quantity: `${receber.quantity}`,
+          periodicity: 'monthly',
+          paymentType: isNewcard ? 'newCard' : 'existingCard',
+          integrationIds: integrationIds,
+          Customer: {
+            integrationId: `##${pessoa.id}`,
+            document: pessoa.cpf,
+            name: pessoa.nome,
+            email: pessoa.email
+          },
+          Card: card
+        }
+
+        if (discounts) {
+          sendPay.discounts = discounts
+        }
+
+        console.log(sendPay)
+
+        pay = await new ServiceGalaxyPay().createPaymentBillAndCustomer(sendPay)
       }
 
-      if (discounts) {
-        sendPay.discounts = discounts
+      await trx.commit()
+
+      if (receberModel.meioPgto === 'galaxpay') {
+        if (pay.type === false) {
+          console.log('galax false')
+          // deletar
+          await new ServiceReceber().destroy(receberModel.id)
+          await new ServiceParticipante().destroy(participante_id)
+          throw pay
+        } else {
+          console.log('galax true')
+          const paymentBillInternalId = pay.paymentBillInternalId
+          await new ServiceReceber().update(receberModel.id, {
+            transactionId: paymentBillInternalId,
+            id: receberModel.id
+          })
+        }
       }
-
-      console.log(sendPay)
-
-      const pay = await new ServiceGalaxyPay().createPaymentBillAndCustomer(
-        sendPay
-      )
 
       if (receberModel.meioPgto === 'koi') {
         console.log('koi')
@@ -148,15 +201,15 @@ class ReceberController {
         // const receberItems = await receber.receberItems().create(items[0], trx)
       }
 
-      /*const receberItems = await receberModel
+      /* const receberItems = await receberModel
         .receberItems()
         .createMany(items, trx)
       // const ri = receberItems.fetch()
       receberItems.forEach(e => console.log(e.id))
 */
-      //await trx.rollback()
-      await trx.commit()
-      return response.status(200).send("Transação concluída com sucesso!")
+      // await trx.rollback()
+
+      return response.status(200).send('Transação concluída com sucesso!')
       // return res
     } catch (error) {
       await trx.rollback()
@@ -168,6 +221,7 @@ class ReceberController {
     try {
       const payload = request.all()
       const res = await new ServiceReceber().udpate(params.id, payload)
+
       return res
     } catch (error) {
       return response.status(400).send({ message: error.message })

@@ -23,6 +23,16 @@ class Participante {
       throw error
     }
   }
+
+  async destroy (ID) {
+    try {
+      const participante = await Model.find(ID)
+      await participante.delete()
+      return true
+    } catch (error) {
+      return error
+    }
+  }
 }
 
 module.exports = Participante

@@ -23,7 +23,7 @@ class ParticipanteController {
     }
     // eslint-disable-next-line camelcase
     if (evento_id) {
-      query.where('evento_id', 'LIKE', evento_id)
+      query.where('evento_id', '=', evento_id)
     }
 
     query.with('pessoa')
