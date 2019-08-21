@@ -473,7 +473,9 @@ class SiteController {
         throw 'Contrato não localizado!'
       }
 
-      const receber = await receberModel.findOrFail(receber_id)
+      const receber = await receberModel.findOrFail(
+        receber_id.replace('@@', '')
+      )
       receber.status = contrato.paymentBill.status
       receber.statusDescription = contrato.paymentBill.statusDescription
       receber.transactionId = contrato.paymentBill.internalId
@@ -489,7 +491,7 @@ class SiteController {
           item.paymentBillIntegrationId = transacao.integrationId
           item.payDay = transacao.payDay
           item.installmentNumber = transacao.installmentNumber
-          /* item.tid = transacao.tid
+          item.tid = transacao.tid
           item.additionalInfo = transacao.additionalInfo
           item.customerInternalId = transacao.customerInternalId
           item.customerIntegrationId = transacao.customerIntegrationId
@@ -497,9 +499,8 @@ class SiteController {
           item.link = transacao.link
           item.brand = transacao.brand
           item.lastUpdateDate = transacao.lastUpdateDate
-          item.authorizationCode = transacao.authorizationCode */
+          item.authorizationCode = transacao.authorizationCode
           item.save()
-          console.log('---- item --------------')
         }
       }
     } catch (e) {
