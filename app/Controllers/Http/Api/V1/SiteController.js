@@ -385,7 +385,7 @@ class SiteController {
       data: {
         Auth,
         Request: {
-          internalId: `${ID}`
+          integrationId: `${ID}`
         }
       }
     }
@@ -403,8 +403,12 @@ class SiteController {
   async retorno ({ request, response }) {
     const r = request.all()
     console.log(r)
-    console.log('contrato = ', r.data.billInternalId)
-    console.log('/transação= ', r.data.transactionIntegrationId)
+    console.log('contrato billInternalId= ', r.data.billInternalId)
+    console.log('contrato billIntegrationId = ', r.data.billIntegrationId)
+    console.log(
+      '/transação transactionIntegrationId= ',
+      r.data.transactionIntegrationId
+    )
     // const ID = parseInt(r.data.billIntegrationId.replace('@@', ''))
     const ID = parseInt(r.data.transactionIntegrationId.replace('@@', ''))
 
@@ -428,10 +432,11 @@ class SiteController {
       await registro.save()
 
       const billInternalId = r.data.billInternalId
+      const billIntegrationId = r.data.billIntegrationId
 
       console.log('contrato... ', billInternalId)
       console.log('URL= ', _URL)
-      const contrato = await this.getPaymentBillInfo(billInternalId)
+      const contrato = await this.getPaymentBillInfo(billIntegrationId)
 
       console.log('contrato.... receber_id= ', receber_id)
       /// console.log(contrato)
@@ -450,6 +455,47 @@ class SiteController {
       console.log('excessão gerada ')
       console.log('error ', e.message)
       return response.status(400).send({ message: 'Não localizado!' })
+    }
+  }
+
+  async updateTransactions ({ request, response }) {
+    let { receber_id, integrationId } = request.all()
+
+    integrationId = '##' + integrationId
+
+    try {
+      const contrato = await this.getPaymentBillInfo('@@103')
+
+      if (!contrato.type) {
+        throw 'Contrato não localizado!'
+      }
+
+      const receber = await receberModel.findOrFail(receber_id)
+      // receber.status = contrato.paymentBill.status
+      // receber.statusDescription = contrato.paymentBill.statusDescription
+      // receber.save()
+
+      // Contas a receber items
+      for (let i = 0; i < contrato.paymentBill.transactions.length; i++) {
+        const transacao = contrato.paymentBill.transactions[i]
+        const item = await ServiceReceberItem.find(transacao.integrationId)
+        if (item) {
+          item.paymentBillInternalId = transacao.billInternalId
+          item.paymentBillIntegrationId = transacao.integrationId
+          item.payDay = transacao.payDay
+          item.installmentNumber = transacao.installmentNumber
+          item.tid = transacao.tid
+          item.additionalInfo = transacao.additionalInfo
+          item.customerInternalId = transacao.customerInternalId
+          item.customerIntegrationId = transacao.customerIntegrationId
+          item.cardInternalId = transacao.cardInternalId
+          item.link = transacao.link
+          item.brand = transacao.brand
+          item.save()
+        }
+      }
+    } catch (e) {
+      response.status(400).send(e.message)
     }
   }
 }

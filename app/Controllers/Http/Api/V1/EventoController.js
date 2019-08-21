@@ -112,7 +112,16 @@ class EventoController {
       const evento = await Evento.findOrFail(params.id)
       await evento.load('local')
       await evento.load('treinamento')
-      // await evento.load('participantes')
+      /* let xxx = await evento.local().fetch()
+      let r = xxx.nome
+      await evento.load('participantes')
+
+      let ddd = await evento.participantes().fetch()
+
+      ddd.rows.forEach(e => {
+        console.log(e.id)
+      }) */
+
       // evento.participantes.forEach(r => console.log(r))
       // let a = await evento.participantes().fetch()
       // console.log(a[0].id)

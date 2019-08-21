@@ -27,6 +27,9 @@ class ReceberItemSchema extends Schema {
       table.string('brand', 15)
       table.string('truncatedNumber', 20)
       table.string('cardInternalId')
+      table.string('customerInternalId', 20)
+      table.string('customerIntegrationId', 20)
+      table.string('link', 250)
       table
         .integer('receber_id')
         .unsigned()
