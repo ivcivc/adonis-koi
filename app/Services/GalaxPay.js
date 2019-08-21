@@ -111,6 +111,26 @@ class GalaxPay {
       })
     return retorno
   }
+
+  async pagarForaSistema (ID) {
+    return new Promise((resolve, reject) => {
+      const url = `${_URL}/payedExternalTransaction`
+      const data = {
+        Auth,
+        Request: { transactionIntegrationId: `${ID}` }
+      }
+
+      axios
+        .post(url, data)
+        .then(res => {
+          resolve(res)
+        })
+        .catch(e => {
+          console.log('galax falhou')
+          reject(e)
+        })
+    })
+  }
 }
 
 module.exports = GalaxPay

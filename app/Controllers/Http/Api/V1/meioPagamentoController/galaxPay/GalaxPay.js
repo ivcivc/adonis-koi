@@ -51,6 +51,15 @@ class GalaxPayController {
 
     return retorno
   }
+
+  async pagarForaSistema ({ request }) {
+    // eslint-disable-next-line camelcase
+    const { receber_item_id } = request.only('receber_item_id')
+
+    const retorno = await new Service().pagarForaSistema(receber_item_id)
+
+    return retorno.data
+  }
 }
 
 module.exports = GalaxPayController
