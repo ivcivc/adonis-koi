@@ -405,10 +405,10 @@ class SiteController {
     console.log(r)
     console.log('contrato billInternalId= ', r.data.billInternalId)
     console.log('contrato billIntegrationId = ', r.data.billIntegrationId)
-    console.log(
-      '/transação transactionIntegrationId= ',
-      r.data.transactionIntegrationId
-    )
+    // r.data.billInternalId (receber - numero do contrado campo tabela transactionId)
+    // r.data.billIntegrationId (o mesmo ID DA CONTA A RECEBER ) CAMPO: transactionInternalId
+    // r.data.transactionIntegrationId (receber_items: paymentBillIntegrationId) o mesmo que o numero do ID )
+    console.log('/transação transactionIntegrationId= ')
     // const ID = parseInt(r.data.billIntegrationId.replace('@@', '')).
     const ID = parseInt(r.data.transactionIntegrationId.replace('@@', ''))
 
@@ -446,6 +446,8 @@ class SiteController {
       receber.statusDescription = contrato.paymentBill.statusDescription
       receber.save()
 
+      await this.updateTransactions(billIntegrationId)
+
       console.log('status contrato= ', contrato.paymentBill.status)
 
       // console.log('contrato= ', contrato.toJSON())
@@ -458,22 +460,25 @@ class SiteController {
     }
   }
 
-  async updateTransactions ({ request, response }) {
-    let { receber_id, integrationId } = request.all()
+  async updateTransactions (receber_id) {
+    // { request, response }
+    // let { receber_id, integrationId } = request.all()
 
-    integrationId = '##' + integrationId
+    // integrationId = '##' + integrationId
 
     try {
-      const contrato = await this.getPaymentBillInfo('@@103')
+      const contrato = await this.getPaymentBillInfo(receber_id)
 
       if (!contrato.type) {
         throw 'Contrato não localizado!'
       }
 
       const receber = await receberModel.findOrFail(receber_id)
-      // receber.status = contrato.paymentBill.status
-      // receber.statusDescription = contrato.paymentBill.statusDescription
-      // receber.save()
+      receber.status = contrato.paymentBill.status
+      receber.statusDescription = contrato.paymentBill.statusDescription
+      receber.transactionId = contrato.paymentBill.internalId
+      receber.transactionInternalId = contrato.paymentBill.integrationId
+      receber.save()
 
       // Contas a receber items
       for (let i = 0; i < contrato.paymentBill.transactions.length; i++) {
