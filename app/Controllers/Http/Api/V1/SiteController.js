@@ -499,7 +499,7 @@ class SiteController {
           item.lastUpdateDate = transacao.lastUpdateDate
           item.authorizationCode = transacao.authorizationCode
           item.save()
-          console.log('---- item -------------')
+          console.log('---- item --------------')
         }
       }
     } catch (e) {
