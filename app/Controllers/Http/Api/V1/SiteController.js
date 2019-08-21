@@ -499,10 +499,12 @@ class SiteController {
           item.lastUpdateDate = transacao.lastUpdateDate
           item.authorizationCode = transacao.authorizationCode
           item.save()
+          console.log('---- item -------------')
         }
       }
     } catch (e) {
-      response.status(400).send(e.message)
+      // response.status(400).send(e.message)
+      console.log('error apresentado: ', error.message)
     }
   }
 }
