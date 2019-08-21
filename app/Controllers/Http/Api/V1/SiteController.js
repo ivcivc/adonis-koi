@@ -500,6 +500,8 @@ class SiteController {
           item.brand = transacao.brand
           item.lastUpdateDate = transacao.lastUpdateDate
           item.authorizationCode = transacao.authorizationCode
+          item.status = transacao.status
+          item.statusDescription = transacao.statusDescription
           item.save()
         }
       }
