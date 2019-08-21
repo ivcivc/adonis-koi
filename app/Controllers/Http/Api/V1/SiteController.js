@@ -496,6 +496,8 @@ class SiteController {
           item.cardInternalId = transacao.cardInternalId
           item.link = transacao.link
           item.brand = transacao.brand
+          item.lastUpdateDate = transacao.lastUpdateDate
+          item.authorizationCode = transacao.authorizationCode
           item.save()
         }
       }
