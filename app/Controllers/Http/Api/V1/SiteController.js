@@ -409,7 +409,7 @@ class SiteController {
       '/transação transactionIntegrationId= ',
       r.data.transactionIntegrationId
     )
-    // const ID = parseInt(r.data.billIntegrationId.replace('@@', ''))
+    // const ID = parseInt(r.data.billIntegrationId.replace('@@', '')).
     const ID = parseInt(r.data.transactionIntegrationId.replace('@@', ''))
 
     try {
