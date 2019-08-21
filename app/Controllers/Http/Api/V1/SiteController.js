@@ -489,7 +489,7 @@ class SiteController {
           item.paymentBillIntegrationId = transacao.integrationId
           item.payDay = transacao.payDay
           item.installmentNumber = transacao.installmentNumber
-          item.tid = transacao.tid
+          /* item.tid = transacao.tid
           item.additionalInfo = transacao.additionalInfo
           item.customerInternalId = transacao.customerInternalId
           item.customerIntegrationId = transacao.customerIntegrationId
@@ -497,7 +497,7 @@ class SiteController {
           item.link = transacao.link
           item.brand = transacao.brand
           item.lastUpdateDate = transacao.lastUpdateDate
-          item.authorizationCode = transacao.authorizationCode
+          item.authorizationCode = transacao.authorizationCode */
           item.save()
           console.log('---- item --------------')
         }
