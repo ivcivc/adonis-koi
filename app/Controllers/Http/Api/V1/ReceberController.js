@@ -69,7 +69,7 @@ class ReceberController {
               number: card.cardNumber,
               holder: retira_acentos(card.cardName),
               expiryMonth: card.cardValidate.substr(0, 2),
-              expiryYear: card.cardValidate.substr(3, 4),
+              expiryYear: card.cardValidate.substr(2, 4),
               cvv: card.cardCode,
               brand: card.brand
             }
