@@ -50,7 +50,7 @@ class ReceberItem {
       await registro.save()
 
       /* Atualizar status da conta a receber */
-      const receber = await new ServiceReceber().udpate(registro.receber_id, {
+      const receber = await new ServiceReceber().update(registro.receber_id, {
         id: registro.receber_id
       })
 

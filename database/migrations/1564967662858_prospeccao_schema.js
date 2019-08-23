@@ -6,10 +6,7 @@ const Schema = use('Schema')
 class ProspeccaoSchema extends Schema {
   up () {
     this.create('prospeccaos', table => {
-      table
-        .string('Text', 30)
-        .notNullable()
-        .unique()
+      table.string('Text', 30).notNullable()
 
       table.string('Description')
 

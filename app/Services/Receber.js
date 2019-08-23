@@ -99,8 +99,15 @@ class Receber {
 
   async destroy (ID) {
     console.log('EXCLUIR ESTE ID= ', ID)
+
     try {
       const receber = await Model.findOrFail(ID)
+      if (receber.meioPgto === 'galaxpay') {
+        throw { message: 'Não é permitido excluir este registro.' }
+      }
+      if (receber.meioPgto === 'koi' && receber.status === 'closed') {
+        throw { message: 'Não é permitido excluir uma conta quitada.' }
+      }
       await receber.delete()
       return receber
     } catch (error) {
