@@ -33,6 +33,7 @@ function retira_acentos (palavra) {
 class ReceberController {
   async store ({ request, response }) {
     const trx = await Database.beginTransaction()
+    let payRetornouFalse = false
     try {
       const { receber, card } = request.all()
       const items = receber.receberItems
@@ -184,7 +185,8 @@ class ReceberController {
           console.log('galax false')
           // deletar
           await new ServiceReceber().destroy(receberModel.id)
-          await new ServiceParticipante().destroy(participante_id)
+          // await new ServiceParticipante().destroy(participante_id)
+          payRetornouFalse = true
           throw pay
         } else {
           console.log('galax true')
@@ -218,7 +220,11 @@ class ReceberController {
       // return res
     } catch (error) {
       await trx.rollback()
-      return response.status(400).send(error)
+      if (payRetornouFalse) {
+        return response.status(200).send(error)
+      } else {
+        return response.status(400).send(error)
+      }
     }
   }
 
