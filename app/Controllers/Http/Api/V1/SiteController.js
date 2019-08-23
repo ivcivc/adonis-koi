@@ -460,14 +460,27 @@ class SiteController {
     }
   }
 
+  async sicronizarTransacao ({ request, response }) {
+    let { receber_id } = request.all()
+
+    await this.updateTransactions(receber_id)
+      .then(r => {
+        response.status(200).send('Sincronização concluída com sucesso!')
+      })
+      .catch(e => {
+        response.status(400).send({ message: e.message })
+      })
+  }
+
   async updateTransactions (receber_id) {
     // { request, response }
     // let { receber_id, integrationId } = request.all()
 
     // integrationId = '##' + integrationId
+    let receber_id_internal = '@@' + receber_id.replace('@@', '')
 
     try {
-      const contrato = await this.getPaymentBillInfo(receber_id)
+      const contrato = await this.getPaymentBillInfo(receber_id_internal)
 
       if (!contrato.type) {
         throw 'Contrato não localizado!'
@@ -487,9 +500,9 @@ class SiteController {
         const transacao = contrato.paymentBill.transactions[i]
         const item = await ServiceReceberItem.find(transacao.integrationId)
         if (item) {
-          item.paymentBillInternalId = transacao.billInternalId
+          item.paymentBillInternalId = transacao.internalId
           item.paymentBillIntegrationId = transacao.integrationId
-          item.payDay = transacao.payDay
+          item.payDay = transacao.payday
           item.installmentNumber = transacao.installmentNumber
           item.tid = transacao.tid
           item.additionalInfo = transacao.additionalInfo
@@ -507,7 +520,7 @@ class SiteController {
       }
     } catch (e) {
       // response.status(400).send(e.message)
-      console.log('error apresentado: ', error.message)
+      console.log('error apresentado: ', e.message)
     }
   }
 }

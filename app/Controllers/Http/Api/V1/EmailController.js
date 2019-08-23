@@ -71,27 +71,32 @@ class EmailController {
       console.log('all done:', lista)
     })
 */
-    for (let a = 0; a < participante.rows.length; a++) {
-      console.log('for ', a)
-      let r = await participante.rows[a].pessoa().fetch()
-      let evento = await participante.rows[a].evento().fetch()
-      console.log('enviando email nr. ', a)
-      await Mail.send(
-        ['emails.informativo'],
-        {
-          emailInformativo: evento.emailInformativo
-        },
-        message => {
-          message
-            .to(_MAIL_EMPRESA)
-            .from(r.email)
-            .subject(evento.emailInformativoTitulo)
-        }
-      )
-      console.log('enviado email ', a)
-    }
 
-    response.status(200).send('ok')
+    try {
+      for (let a = 0; a < participante.rows.length; a++) {
+        console.log('for ', a)
+        let r = await participante.rows[a].pessoa().fetch()
+        let evento = await participante.rows[a].evento().fetch()
+        console.log('enviando email nr. ', a)
+        await Mail.send(
+          ['emails.informativo'],
+          {
+            emailInformativo: evento.emailInformativo
+          },
+          message => {
+            message
+              .to(_MAIL_EMPRESA)
+              .from(r.email)
+              .subject(evento.emailInformativoTitulo)
+          }
+        )
+        console.log('enviado email ', a)
+      }
+
+      response.status(200).send('ok')
+    } catch (e) {
+      response.status(400).send('Ocorreu uma falha no disparo de email.')
+    }
   }
 }
 

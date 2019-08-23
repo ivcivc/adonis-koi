@@ -48,14 +48,32 @@ class ReceberItemController {
   async index ({ request, response }) {
     try {
       let payload = {}
+
+      const page = request.input('page')
+      const limit = request.input('limit')
+
+      payload.page = page
+      payload.limit = limit
+
       const status = request.input('status')
       const sortSelector = request.input('sortSelector')
       const sortDirection = request.input('sortDirection')
       const nome = request.input('nome')
       const isLocalizar = !!request.input('isLocalizar')
+      const periodo = request.input('periodo')
+      const dInicio = request.input('dInicio')
+      const dTermino = request.input('dTermino')
 
       payload.isLocalizar = isLocalizar
       console.log('l o c a l i z a n d o')
+
+      if (periodo) {
+        if (periodo === 'true') {
+          payload.dInicio = dInicio
+          payload.dTermino = dTermino
+          payload.isPeriodo = true
+        }
+      }
 
       if (nome) {
         payload.nome = nome

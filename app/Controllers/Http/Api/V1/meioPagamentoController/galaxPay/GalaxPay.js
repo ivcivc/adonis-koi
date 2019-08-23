@@ -60,6 +60,19 @@ class GalaxPayController {
 
     return retorno.data
   }
+
+  async retryTransaction ({ request }) {
+    // eslint-disable-next-line camelcase
+    const { cliente_id, receber_id, receber_item_id } = request.all()
+
+    const retorno = await new Service().retryTransaction(
+      cliente_id,
+      receber_id,
+      receber_item_id
+    )
+
+    return retorno.data
+  }
 }
 
 module.exports = GalaxPayController

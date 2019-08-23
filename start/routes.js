@@ -53,6 +53,12 @@ Route.group(() => {
     '/pagarForaSistema',
     'meioPagamentoController/galaxPay/GalaxPay.pagarForaSistema'
   )
+
+  Route.post(
+    '/retryTransaction',
+    'meioPagamentoController/galaxPay/GalaxPay.retryTransaction'
+  )
+
   // PagarMe
   Route.post('/pagarMe/addPlano', 'pagarMeController/PagarMe.addPlano')
 
@@ -194,8 +200,7 @@ Route.group(() => {
   Route.get('/site/getEventosSite', 'SiteController.getEventosSite')
   Route.get('/site/getBandeiras', 'SiteController.getBandeiras')
   Route.post('/site/getCPF', 'SiteController.getCPF')
-  Route.post('/site/updateTransactions', 'SiteController.updateTransactions')
-
+  Route.post('/site/updateTransactions', 'SiteController.sicronizarTransacao')
   /* Route.post('/receber', 'ReceberController.store')
 Route.put('/receber/:id', 'ReceberController.update')
 Route.delete('/receber/:id', 'ReceberController.destroy')

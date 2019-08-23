@@ -5,6 +5,29 @@ const Model = use('App/Models/ReceberItem')
 const ServiceReceber = use('App/Services/Receber')
 // const Database = use('Database')
 
+const _quitado = [
+  'payExternal',
+  'captured',
+  'payedBoleto',
+  'lessValueBoleto',
+  'moreValueBoleto',
+  'paidDuplicityBoleto',
+  'liquidado'
+]
+const _cancelado = ['cancel', 'cancelado']
+const _pendente = [
+  'denied',
+  'processError',
+  'reversed',
+  'notSend',
+  'pendingBoleto',
+  'free',
+  'authorized',
+  'emAberto',
+  'transmitir',
+  'auto'
+]
+
 class ReceberItem {
   async add (payload, trx) {
     try {
@@ -74,11 +97,29 @@ class ReceberItem {
       const status = payload.status
       const nome = payload.nome
       const isLocalizar = payload.isLocalizar
+      const page = payload.page
+      const limit = payload.limit
+      const isPeriodo = payload.isPeriodo
+      const dInicio = payload.dInicio
+      const dTermino = payload.dTermino
 
       const query = Model.query()
 
       if (status) {
-        query.where('status', 'LIKE', status)
+        if (status === 'EM ABERTO') {
+          query.whereIn('status', _pendente)
+          query.whereHas('receber', receberQuery => {
+            receberQuery.where('status', 'active')
+          })
+        }
+
+        if (status === 'FINALIZADO') {
+          query.whereIn('status', _quitado)
+        }
+
+        if (status === 'CANCELADO') {
+          query.whereIn('status', _cancelado)
+        }
         // query.orderByRaw('pessoa,nome', 'desc')
       }
 
@@ -98,6 +139,10 @@ class ReceberItem {
         // query.orderByRaw('pessoa,nome', 'desc')
       }
 
+      if (isPeriodo) {
+        query.whereBetween('payDay', [dInicio, dTermino])
+      }
+
       query.with('receber')
       query.with('receber.pessoa')
 
@@ -113,7 +158,7 @@ class ReceberItem {
         // query.orderByRaw('pessoa,nome')
       }
 
-      const dados = await query.paginate()
+      const dados = await query.paginate(page, limit)
       dados.rows.forEach(o => {
         let r = o.$relations.receber.$relations.pessoa
         o.aluno = r.nome
