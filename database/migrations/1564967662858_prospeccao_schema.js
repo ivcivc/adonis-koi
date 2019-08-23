@@ -23,6 +23,9 @@ class ProspeccaoSchema extends Schema {
       table.string('Padrinho', 30)
       table.string('Consultor', 30)
 
+      table.string('Celular', 15)
+      table.text('Email')
+
       table
         .string('Situacao', 12)
         .notNullable()

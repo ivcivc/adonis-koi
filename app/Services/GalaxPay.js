@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 'use strict'
 
 const axios = require('axios')
@@ -118,6 +119,32 @@ class GalaxPay {
       const data = {
         Auth,
         Request: { transactionIntegrationId: `${ID}` }
+      }
+
+      axios
+        .post(url, data)
+        .then(res => {
+          resolve(res)
+        })
+        .catch(e => {
+          console.log('galax falhou')
+          reject(e)
+        })
+    })
+  }
+
+  // Reenvia uma transação utilizando informações do cliente, Contrato/Venda e da transação.
+  // eslint-disable-next-line camelcase
+  async retryTransaction (cliente_id, receber_id, receber_item_id) {
+    return new Promise((resolve, reject) => {
+      const url = `${_URL}/retryTransaction`
+      const data = {
+        Auth,
+        Request: {
+          customerIntegrationId: `${cliente_id}`,
+          paymentBillIntegrationId: `${receber_id}`,
+          transactionIntegrationId: `${receber_item_id}`
+        }
       }
 
       axios

@@ -42,10 +42,15 @@ class ReceberController {
 
       let participante_id = receber.participante_id
 
+      let cardInternalId = null
+
       let isNewcard = receber.cardInternalId === '_new'
       if (receber.cardInternalId === undefined) {
         isNewcard = true
+      } else {
+        cardInternalId = receber.cardInternalId
       }
+
       delete receber['cardInternalId']
 
       let cardEnviar = null
@@ -70,7 +75,7 @@ class ReceberController {
           }
         } else {
           cardEnviar = {
-            integrationId: receber.cardInternalId
+            internalId: cardInternalId
           }
         }
       }
@@ -160,7 +165,7 @@ class ReceberController {
             name: pessoa.nome,
             email: pessoa.email
           },
-          Card: card
+          Card: cardEnviar
         }
 
         if (discounts) {
