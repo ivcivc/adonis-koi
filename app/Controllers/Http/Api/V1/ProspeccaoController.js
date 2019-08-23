@@ -45,10 +45,11 @@ class ProspeccaoController {
     return prospeccao
   }
 
-  async destroy ({ request, response }) {
+  async destroy ({ request, params, response }) {
     const { key } = request.all()
+    const id = params.id
     try {
-      const prospeccao = await Prospeccao.findOrFail(key)
+      const prospeccao = await Prospeccao.findOrFail(id)
       await prospeccao.delete()
       return response.status(200).send('Excluído com sucesso!')
     } catch (error) {
