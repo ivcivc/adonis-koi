@@ -5,6 +5,8 @@ const crypto = require('crypto')
 const User = use('App/Models/User')
 const Mail = use('Mail')
 
+const Env = use('Env')
+
 class ForgotPasswordController {
   async store ({ request, response }) {
     try {
@@ -25,7 +27,7 @@ class ForgotPasswordController {
         message => {
           message
             .to(user.email)
-            .from('ivan.a.oliveira@terra.com.br', 'Ivan | IVC')
+            .from(Env.get('MAIL_EMPRESA'), 'Koi | KOI')
             .subject('Recuperação de senha')
         }
       )
