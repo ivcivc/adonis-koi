@@ -34,7 +34,7 @@
     "adonis-acl": "^1.1.1",
     "adonis-bumblebee": "^2.0.0",
     "axios": "^0.18.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.26",
     "mysql": "^2.16.0",
     "pagarme": "^4.1.0",
